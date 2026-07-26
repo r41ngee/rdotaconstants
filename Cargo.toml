@@ -2,6 +2,8 @@
 name = "rdotaconstants"
 version = "0.1.0"
 edition = "2024"
+description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
+license = "MIT"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
