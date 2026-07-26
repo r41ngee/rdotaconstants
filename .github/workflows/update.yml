@@ -74,8 +74,8 @@ jobs:
                         echo "::error::Build output looks incomplete (heroes=$heroes items=$items abilities=$abilities)"
                         exit 1
                     fi
-            - run: cargo install cargo-bump
             - name: Commit and push if constants changed
+              id: update
               env:
                   LATEST: ${{ needs.check.outputs.latest }}
               run: |
@@ -83,30 +83,31 @@ jobs:
                     git config user.name  'github-actions[bot]'
                     git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
+                    echo "$LATEST" > pydotaconstants_commit.sha
+
                     if git diff --quiet src/data/; then
                         echo "No constant changes. Advancing pydotaconstants tracker only."
-                        echo "$LATEST" > pydotaconstants_commit.sha
-                        if ! git diff --quiet -- pydotaconstants_commit.sha; then
-                            git add pydotaconstants_commit.sha
-                            git commit -m "chore: track pydotaconstants ${LATEST} (no constant changes)"
+                        git add pydotaconstants_commit.sha
+                        if ! git diff --quiet --cached -- pydotaconstants_commit.sha; then
+                            git commit -m "chore: track pydotaconstants ${LATEST}"
                             git push
                         fi
-                            exit 0
-                            echo "data_change=false" >> $GITHUB_OUTPUT
-                        fi
-
-                        echo "$LATEST" > pydotaconstants_commit.sha
+                        echo "data_change=false" >> "$GITHUB_OUTPUT"
+                    else
+                        echo "Constants changed. Committing update."
+                        cargo install cargo-bump
                         cargo bump patch
                         git add -A
                         git commit -m "Update constants from pydotaconstants ${LATEST}"
                         git push
-                        echo "data_change=true" >> $GITHUB_OUTPUT
+                        echo "data_change=true" >> "$GITHUB_OUTPUT"
+                    fi
 
     publish:
         name: Publish to crates-io
         runs-on: ubuntu-latest
         needs: update
-        if: needs.update.outputs.data_change
+        if: needs.update.outputs.data_change == 'true'
         steps:
             - uses: actions/checkout@v5
             - uses: actions-rust-lang/setup-rust-toolchain@v1
