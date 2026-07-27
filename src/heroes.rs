@@ -32,6 +32,22 @@ impl Hero {
             .unwrap_or_default()
     }
 
+    pub fn get_primary_attribute(&self) -> PrimaryAttribute {
+        let string = self.data.get("AttributePrimary").cloned().unwrap();
+        match string {
+            Value::String(s) => {
+                match s.as_str() {
+                    "DOTA_ATTRIBUTE_STRENGTH" => PrimaryAttribute::Strength,
+                    "DOTA_ATTRIBUTE_AGILITY" => PrimaryAttribute::Agility,
+                    "DOTA_ATTRIBUTE_INTELLECT" => PrimaryAttribute::Intelligence,
+                    "DOTA_ATTRIBUTE_ALL" => PrimaryAttribute::Universal,
+                    _ => panic!(),
+                }
+            },
+            _ => panic!(),
+        }
+    }
+
     /// Function used to get a [Hero] object by hero's slugname.
     /// 
     /// ⚠️ Slugname should contain `npc_dota_hero_` part.
@@ -115,6 +131,13 @@ impl Hero {
             })
             .collect()
     }
+}
+
+pub enum PrimaryAttribute {
+    Strength,
+    Agility,
+    Intelligence,
+    Universal
 }
 
 fn parse_heroes() -> &'static HashMap<String, serde_json::Map<String, Value>> {
