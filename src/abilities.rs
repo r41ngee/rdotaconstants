@@ -11,6 +11,13 @@ pub struct Ability {
 }
 
 impl Ability {
+    /// Method used to get ability display name.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Ability;
+    /// let ability = Ability::get("lion_impale").unwrap();
+    /// assert_eq!(ability.display_name(), "Earth Spike");
+    /// ```
     pub fn display_name(&self) -> String {
         let key = format!("DOTA_Tooltip_ability_{}", self.name);
         locals()
@@ -19,6 +26,7 @@ impl Ability {
             .unwrap_or_default()
     }
 
+    /// Method used to get ability UI description.
     pub fn display_description(&self) -> String {
         let key = format!("DOTA_Tooltip_ability_{}_Description", self.name);
         locals()
@@ -27,6 +35,8 @@ impl Ability {
             .unwrap_or_default()
     }
 
+    /// Method used to get an [Ability] object by its slugname.
+    /// Returns [Option]<[Ability]>
     pub fn get<T: AsRef<str>>(name: T) -> Option<Ability> {
         let map = parse_abilities();
         let key = name.as_ref();
@@ -38,6 +48,14 @@ impl Ability {
         })
     }
 
+    #[cfg(feature = "unstable")]
+    /// # Use `unstable` feature to use this function
+    /// This function us marked as unstable because
+    /// of undefined result for abilities with
+    /// same name.
+    /// 
+    /// For example, Lion's **Hex** and Shadow Shaman's **Hex** will return 
+    /// undefined result.
     pub fn get_by_display_name(display_name: &str) -> Option<Ability> {
         let locs = locals();
         let prefix = "DOTA_Tooltip_ability_";
@@ -55,6 +73,7 @@ impl Ability {
         None
     }
 
+    /// Returns [Vec] containing all possible variants of [Ability].
     pub fn all() -> Vec<Ability> {
         let map = parse_abilities();
         map.iter()

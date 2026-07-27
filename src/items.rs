@@ -5,13 +5,17 @@ use crate::locals;
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
 
+/// Struct that represents an Item object
 #[derive(Debug, Clone)]
 pub struct Item {
+    /// Item's slugname
     pub name: String,
+    /// Item's additional data
     pub data: serde_json::Map<String, Value>,
 }
 
 impl Item {
+    /// Method that returns item's display name.
     pub fn display_name(&self) -> String {
         let key = format!("DOTA_Tooltip_Ability_{}", self.name);
         locals()
@@ -20,6 +24,8 @@ impl Item {
             .unwrap_or_default()
     }
 
+    /// Function that used to get an [Item] object
+    /// from its slugname.
     pub fn get<T: AsRef<str>>(name: T) -> Option<Item> {
         let map = parse_items();
         let key = name.as_ref();
@@ -30,6 +36,7 @@ impl Item {
         })
     }
 
+    #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();
         let prefix = "DOTA_Tooltip_Ability_";
@@ -45,6 +52,7 @@ impl Item {
         None
     }
 
+    /// Returns [Vec] with all possible variants of [Item].
     pub fn all() -> Vec<Item> {
         let map = parse_items();
         map.iter()

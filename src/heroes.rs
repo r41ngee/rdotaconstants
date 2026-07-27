@@ -5,14 +5,25 @@ use crate::locals;
 
 pub(crate) static HEROES_JSON: &str = include_str!("data/heroes.json");
 
+/// Struct that represents hero object and its data
 #[derive(Debug, Clone)]
 pub struct Hero {
+    /// Hero's slugname
     pub name: String,
+    /// Hero's ID
     pub id: i64,
+    /// Hero's additional data
     pub data: serde_json::Map<String, Value>,
 }
 
 impl Hero {
+    /// Method used to get ability display name.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Hero;
+    /// let ability = Hero::get("npc_dota_hero_abyssal_underlord").unwrap();
+    /// assert_eq!(ability.display_name(), "Underlord");
+    /// ```
     pub fn display_name(&self) -> String {
         let key = format!("{}:n", self.name);
         locals()
@@ -21,6 +32,9 @@ impl Hero {
             .unwrap_or_default()
     }
 
+    /// Function used to get a [Hero] object by hero's slugname.
+    /// 
+    /// ⚠️ Slugname should contain `npc_dota_hero_` part.
     pub fn get<T: AsRef<str>>(name: T) -> Option<Hero> {
         let map = parse_heroes();
         let key = name.as_ref();
@@ -36,6 +50,24 @@ impl Hero {
         })
     }
 
+    /// Function used to get a [Hero] object by hero's
+    /// ID, mentioned in `data/heroes.json`.
+    /// # Example
+    /// ```
+    /// // heroes.json:
+    /// // {
+    /// //     "npc_dota_hero_antimage": {
+    /// //         ...
+    /// //         "HeroID": "1",
+    /// //         ...
+    /// //     }
+    /// //     ...
+    /// // }
+    /// 
+    /// use rdotaconstants::Hero;
+    /// let hero = Hero::get_by_id(1).unwrap();
+    /// assert_eq!(hero.display_name(), "Anti-Mage");
+    /// ```
     pub fn get_by_id(id: i64) -> Option<Hero> {
         let map = parse_heroes();
         map.iter()
@@ -52,6 +84,8 @@ impl Hero {
             })
     }
 
+    /// Function used to get a [Hero] object by its
+    /// display name.
     pub fn get_by_display_name(display_name: &str) -> Option<Hero> {
         let map = parse_heroes();
         let locs = locals();
@@ -64,6 +98,7 @@ impl Hero {
         None
     }
 
+    /// Function returns all variants of [Hero].
     pub fn all() -> Vec<Hero> {
         let map = parse_heroes();
         map.iter()
