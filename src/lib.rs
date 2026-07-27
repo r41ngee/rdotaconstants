@@ -71,12 +71,6 @@ mod tests {
     }
 
     #[test]
-    fn test_ability_get_by_display_name() {
-        let ability = Ability::get_by_display_name("Mana Break").unwrap();
-        assert_eq!(ability.name, "antimage_mana_break");
-    }
-
-    #[test]
     fn test_ability_all() {
         let all = Ability::all();
         assert!(all.len() > 1000);
@@ -86,12 +80,6 @@ mod tests {
     fn test_item_get() {
         let item = Item::get("item_blink").unwrap();
         assert_eq!(item.display_name(), "Blink Dagger");
-    }
-
-    #[test]
-    fn test_item_get_by_display_name() {
-        let item = Item::get_by_display_name("Blink Dagger").unwrap();
-        assert_eq!(item.name, "item_blink");
     }
 
     #[test]

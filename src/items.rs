@@ -36,6 +36,7 @@ impl Item {
         })
     }
 
+    #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();
         let prefix = "DOTA_Tooltip_Ability_";
