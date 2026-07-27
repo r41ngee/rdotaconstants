@@ -1,3 +1,8 @@
+/*!
+ * rdotaconstants - library created to work with Dota constant values
+ * 
+ * Currently supports [Ability], [Item], [Hero] and [locals] objects.
+ */
 pub mod heroes;
 pub mod abilities;
 pub mod items;
@@ -7,6 +12,7 @@ use std::sync::OnceLock;
 
 static LOCALS_JSON: &str = include_str!("data/locals.json");
 
+/// Function that returns a [HashMap]<[String], [String]> with all localization strings for English language.
 pub fn locals() -> &'static HashMap<String, String> {
     static ONCE: OnceLock<HashMap<String, String>> = OnceLock::new();
     ONCE.get_or_init(|| {
