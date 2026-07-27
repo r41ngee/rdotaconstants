@@ -36,6 +36,25 @@ impl Item {
         })
     }
 
+    /// Function that used to get a item's price,
+    /// if it has one.
+    /// 
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Item;
+    /// let item = Item::get("item_blink").unwrap();
+    /// assert_eq!(item.get_cost().unwrap(), 2250);
+    /// ```
+    pub fn get_cost(&self) -> Option<i32> {
+        match self.data.get("ItemCost") {
+            Some(Value::Number(n)) => n.as_i64().map(|v| v as i32),
+            Some(Value::String(s)) => s.parse::<i32>().ok(),
+            _ => None,
+        }
+    }
+
+
+
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();
