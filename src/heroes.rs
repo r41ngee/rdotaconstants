@@ -32,6 +32,20 @@ impl Hero {
             .unwrap_or_default()
     }
 
+    /**  Method use to get hero's [PrimaryAttribute]
+    * 
+    * # Example
+    * ```
+    * use rdotaconstants::{Hero, heroes::PrimaryAttribute};
+    * let hero = Hero::get("npc_dota_hero_axe").unwrap();
+    * if let PrimaryAttribute::Strength = hero.get_primary_attribute() {} else { panic!() }
+    * ```
+    * 
+    * # Panics
+    * 1. `"AttributePrimary"` was not found in `heroes.json`
+    * 2. `"AttributePrimary"` is not value in `heroes.json`
+    * 3. `"AttributePrimary"` does not matches pattern `"DOTA_ATTRIBUTE_*"`
+    */
     pub fn get_primary_attribute(&self) -> PrimaryAttribute {
         let string = self.data.get("AttributePrimary").cloned().unwrap();
         match string {
