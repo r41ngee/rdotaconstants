@@ -17,12 +17,12 @@ pub struct Hero {
 }
 
 impl Hero {
-    /// Method used to get ability display name.
+    /// Method used to get hero display name.
     /// # Example
     /// ```
     /// use rdotaconstants::Hero;
-    /// let ability = Hero::get("npc_dota_hero_abyssal_underlord").unwrap();
-    /// assert_eq!(ability.display_name(), "Underlord");
+    /// let hero = Hero::get("npc_dota_hero_abyssal_underlord").unwrap();
+    /// assert_eq!(hero.display_name(), "Underlord");
     /// ```
     pub fn display_name(&self) -> String {
         let key = format!("{}:n", self.name);
