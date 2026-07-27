@@ -6,7 +6,8 @@ description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item
 license = "MIT"
 repository = "https://github.com/r41ngee/rdotaconstants"
 exclude-files = [
-    ".github/"
+    ".github/",
+    "pydotaconstants_commit.sha",
 ]
 
 [features]
