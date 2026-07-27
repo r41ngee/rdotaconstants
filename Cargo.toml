@@ -5,6 +5,9 @@ edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
 license = "MIT"
 repository = "https://github.com/r41ngee/rdotaconstants"
+exclude-files = [
+    ".github/"
+]
 
 [features]
 default = []
