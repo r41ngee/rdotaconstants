@@ -15,6 +15,10 @@ pub struct Item {
 }
 
 impl Item {
+    // -----------------------------------------------------------------------------------------
+    // METHODS
+    // -----------------------------------------------------------------------------------------
+
     /// Method that returns item's display name.
     pub fn display_name(&self) -> String {
         let key = format!("DOTA_Tooltip_Ability_{}", self.name);
@@ -22,18 +26,6 @@ impl Item {
             .get(&key)
             .cloned()
             .unwrap_or_default()
-    }
-
-    /// Function that used to get an [Item] object
-    /// from its slugname.
-    pub fn get<T: AsRef<str>>(name: T) -> Option<Item> {
-        let map = parse_items();
-        let key = name.as_ref();
-        let raw = map.get(key)?;
-        Some(Item {
-            name: key.to_string(),
-            data: raw.clone(),
-        })
     }
 
     /// Function that used to get a item's price,
@@ -53,7 +45,21 @@ impl Item {
         }
     }
 
+    // -----------------------------------------------------------------------------------------
+    // FUNCTIONS
+    // -----------------------------------------------------------------------------------------
 
+    /// Function that used to get an [Item] object
+    /// from its slugname.
+    pub fn get<T: AsRef<str>>(name: T) -> Option<Item> {
+        let map = parse_items();
+        let key = name.as_ref();
+        let raw = map.get(key)?;
+        Some(Item {
+            name: key.to_string(),
+            data: raw.clone(),
+        })
+    }
 
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
