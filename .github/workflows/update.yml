@@ -97,6 +97,7 @@ jobs:
                         echo "Constants changed. Committing update."
                         cargo install cargo-bump
                         cargo bump patch
+                        cargo c
                         git add -A
                         git commit -m "Update constants from pydotaconstants ${LATEST}"
                         git push
