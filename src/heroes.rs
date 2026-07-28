@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 use serde_json::Value;
 
 use crate::locals;
@@ -17,6 +17,31 @@ pub struct Hero {
 }
 
 impl Hero {
+    /// Resolves any data field for [Hero] contained in `heroes.json`
+    /// 
+    /// Does not calls panics.
+    /// 
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Hero;
+    /// let hero = Hero::get("npc_dota_hero_antimage").unwrap();
+    /// 
+    /// let v: i32 = hero.resolve_value("CMEnabled").unwrap();
+    /// assert_eq!(v, 1);
+    /// 
+    /// let v2: String = hero.resolve_value("Team").unwrap();
+    /// assert_eq!(v2, "Good");
+    /// ```
+    pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Option<T> {
+        let key = key.into();
+        self.data.get(&key).and_then(|value| {
+            match value {
+                Value::String(s) => s.parse::<T>().ok(),
+                _ => None,
+            }
+        })
+    }
+
     /// Method used to get hero display name.
     /// # Example
     /// ```
@@ -59,6 +84,18 @@ impl Hero {
                 }
             },
             _ => panic!(),
+        }
+    }
+
+    /// Returns an [AttributeTable] for this hero
+    pub fn get_attr_table(&self) -> AttributeTable {
+        AttributeTable {
+            strength_base: self.resolve_value("AttributeBaseStrength").unwrap_or_default(),
+            strength_gain: self.resolve_value("AttributeStrengthGain").unwrap_or_default(),
+            agility_base: self.resolve_value("AttributeBaseAgility").unwrap_or_default(),
+            agility_gain: self.resolve_value("AttributeAgilityGain").unwrap_or_default(),
+            intelligence_base: self.resolve_value("AttributeBaseIntelligence").unwrap_or_default(),
+            intelligence_gain: self.resolve_value("AttributeIntelligenceGain").unwrap_or_default(),
         }
     }
 
@@ -153,6 +190,23 @@ pub enum PrimaryAttribute {
     Agility,
     Intelligence,
     Universal
+}
+
+/// Represents hero's strength, agility, intelligence base
+/// and gain.
+pub struct AttributeTable {
+    /// Strength base value
+    pub strength_base: f32,
+    /// Strength gain per level
+    pub strength_gain: f32,
+    /// Agility base value
+    pub agility_base: f32,
+    /// Agility gain per level
+    pub agility_gain: f32,
+    /// Intelligence base value
+    pub intelligence_base: f32,
+    /// Intelligence gain per level
+    pub intelligence_gain: f32,
 }
 
 fn parse_heroes() -> &'static HashMap<String, serde_json::Map<String, Value>> {
