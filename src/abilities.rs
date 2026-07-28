@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::locals;
+use crate::{errors, locals};
 
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
@@ -16,23 +16,23 @@ impl Ability {
     /// ```
     /// use rdotaconstants::Ability;
     /// let ability = Ability::get("lion_impale").unwrap();
-    /// assert_eq!(ability.display_name(), "Earth Spike");
+    /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
     /// ```
-    pub fn display_name(&self) -> String {
+    pub fn display_name(&self) -> Result<String, errors::ResolveValueError> {
         let key = format!("DOTA_Tooltip_ability_{}", self.name);
         locals()
             .get(&key)
             .cloned()
-            .unwrap_or_default()
+            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
     }
 
     /// Method used to get ability UI description.
-    pub fn display_description(&self) -> String {
+    pub fn display_description(&self) -> Result<String, errors::ResolveValueError> {
         let key = format!("DOTA_Tooltip_ability_{}_Description", self.name);
         locals()
             .get(&key)
             .cloned()
-            .unwrap_or_default()
+            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
     }
 
     /// Method used to get an [Ability] object by its slugname.

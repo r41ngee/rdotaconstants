@@ -61,14 +61,14 @@ mod tests {
     #[test]
     fn test_ability_get() {
         let ability = Ability::get("antimage_mana_break").unwrap();
-        assert_eq!(ability.display_name(), "Mana Break");
+        assert_eq!(ability.display_name().unwrap(), "Mana Break");
     }
 
     #[test]
     fn test_ability_display_description() {
         let ability = Ability::get("antimage_mana_break").unwrap();
         let desc = ability.display_description();
-        assert!(!desc.is_empty());
+        assert!(!desc.unwrap().is_empty());
     }
 
     #[test]
