@@ -147,6 +147,7 @@ impl Hero {
     }
 }
 
+/// Enum representing a hero's primary attribute
 pub enum PrimaryAttribute {
     Strength,
     Agility,
