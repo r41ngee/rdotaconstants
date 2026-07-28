@@ -6,6 +6,7 @@
 pub mod heroes;
 pub mod abilities;
 pub mod items;
+pub mod errors;
 
 use std::collections::HashMap;
 use std::sync::OnceLock;

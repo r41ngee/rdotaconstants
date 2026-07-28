@@ -1,7 +1,7 @@
 use std::{collections::HashMap, str::FromStr};
 use serde_json::Value;
 
-use crate::locals;
+use crate::{locals, errors};
 
 pub(crate) static HEROES_JSON: &str = include_str!("data/heroes.json");
 
@@ -17,7 +17,8 @@ pub struct Hero {
 }
 
 impl Hero {
-    /// Resolves any data field for [Hero] contained in `heroes.json`
+    /// Resolves any string field for [Hero] contained in `heroes.json`.
+    /// No depth fields allowed.
     /// 
     /// Does not calls panics.
     /// 
@@ -32,14 +33,15 @@ impl Hero {
     /// let v2: String = hero.resolve_value("Team").unwrap();
     /// assert_eq!(v2, "Good");
     /// ```
-    pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Option<T> {
+    pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Result<T, errors::ResolveValueError> {
         let key = key.into();
-        self.data.get(&key).and_then(|value| {
-            match value {
-                Value::String(s) => s.parse::<T>().ok(),
-                _ => None,
-            }
-        })
+        let v = self.data.get(&key).ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))?;
+        let rv = match v {
+            Value::String(s) => Ok(s),
+            _ => Err(errors::ResolveValueError::DepthQuery),
+        }?;
+        let parsed = rv.parse::<T>();
+        parsed.map_err(|_| errors::ResolveValueError::StringParseFail(rv.to_string()))
     }
 
     /// Method used to get hero display name.
@@ -63,7 +65,7 @@ impl Hero {
     * ```
     * use rdotaconstants::{Hero, heroes::PrimaryAttribute};
     * let hero = Hero::get("npc_dota_hero_axe").unwrap();
-    * if let PrimaryAttribute::Strength = hero.get_primary_attribute() {} else { panic!() }
+    * if let PrimaryAttribute::Strength = hero.get_primary_attribute().unwrap() {} else { panic!() }
     * ```
     * 
     * # Panics
@@ -71,32 +73,28 @@ impl Hero {
     * 2. `"AttributePrimary"` is not value in `heroes.json`
     * 3. `"AttributePrimary"` does not matches pattern `"DOTA_ATTRIBUTE_*"`
     */
-    pub fn get_primary_attribute(&self) -> PrimaryAttribute {
-        let string = self.data.get("AttributePrimary").cloned().unwrap();
-        match string {
-            Value::String(s) => {
-                match s.as_str() {
-                    "DOTA_ATTRIBUTE_STRENGTH" => PrimaryAttribute::Strength,
-                    "DOTA_ATTRIBUTE_AGILITY" => PrimaryAttribute::Agility,
-                    "DOTA_ATTRIBUTE_INTELLECT" => PrimaryAttribute::Intelligence,
-                    "DOTA_ATTRIBUTE_ALL" => PrimaryAttribute::Universal,
-                    _ => panic!(),
-                }
-            },
+    pub fn get_primary_attribute(&self) -> Result<PrimaryAttribute, errors::ResolveValueError> {
+        const KEY: &'static str = "AttributePrimary";
+        let s: String = self.resolve_value(KEY)?;
+        Ok(match s.as_str() {
+            "DOTA_ATTRIBUTE_STRENGTH" => PrimaryAttribute::Strength,
+            "DOTA_ATTRIBUTE_AGILITY" => PrimaryAttribute::Agility,
+            "DOTA_ATTRIBUTE_INTELLECT" => PrimaryAttribute::Intelligence,
+            "DOTA_ATTRIBUTE_ALL" => PrimaryAttribute::Universal,
             _ => panic!(),
-        }
+        })
     }
 
     /// Returns an [AttributeTable] for this hero
-    pub fn get_attr_table(&self) -> AttributeTable {
-        AttributeTable {
-            strength_base: self.resolve_value("AttributeBaseStrength").unwrap_or_default(),
-            strength_gain: self.resolve_value("AttributeStrengthGain").unwrap_or_default(),
-            agility_base: self.resolve_value("AttributeBaseAgility").unwrap_or_default(),
-            agility_gain: self.resolve_value("AttributeAgilityGain").unwrap_or_default(),
-            intelligence_base: self.resolve_value("AttributeBaseIntelligence").unwrap_or_default(),
-            intelligence_gain: self.resolve_value("AttributeIntelligenceGain").unwrap_or_default(),
-        }
+    pub fn get_attr_table(&self) -> Result<AttributeTable, errors::ResolveValueError> {
+        Ok(AttributeTable {
+            strength_base: self.resolve_value("AttributeBaseStrength")?,
+            strength_gain: self.resolve_value("AttributeStrengthGain")?,
+            agility_base: self.resolve_value("AttributeBaseAgility")?,
+            agility_gain: self.resolve_value("AttributeAgilityGain")?,
+            intelligence_base: self.resolve_value("AttributeBaseIntelligence")?,
+            intelligence_gain: self.resolve_value("AttributeIntelligenceGain")?,
+        })
     }
 
     /// Function used to get a [Hero] object by hero's slugname.
