@@ -6,6 +6,7 @@
 pub mod heroes;
 pub mod abilities;
 pub mod items;
+pub mod errors;
 
 use std::collections::HashMap;
 use std::sync::OnceLock;
@@ -60,14 +61,14 @@ mod tests {
     #[test]
     fn test_ability_get() {
         let ability = Ability::get("antimage_mana_break").unwrap();
-        assert_eq!(ability.display_name(), "Mana Break");
+        assert_eq!(ability.display_name().unwrap(), "Mana Break");
     }
 
     #[test]
     fn test_ability_display_description() {
         let ability = Ability::get("antimage_mana_break").unwrap();
         let desc = ability.display_description();
-        assert!(!desc.is_empty());
+        assert!(!desc.unwrap().is_empty());
     }
 
     #[test]
@@ -79,7 +80,7 @@ mod tests {
     #[test]
     fn test_item_get() {
         let item = Item::get("item_blink").unwrap();
-        assert_eq!(item.display_name(), "Blink Dagger");
+        assert_eq!(item.display_name().unwrap(), "Blink Dagger");
     }
 
     #[test]
