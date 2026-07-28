@@ -80,7 +80,7 @@ mod tests {
     #[test]
     fn test_item_get() {
         let item = Item::get("item_blink").unwrap();
-        assert_eq!(item.display_name(), "Blink Dagger");
+        assert_eq!(item.display_name().unwrap(), "Blink Dagger");
     }
 
     #[test]
