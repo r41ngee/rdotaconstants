@@ -4,15 +4,6 @@ Rust port of [pydotaconstants](https://github.com/r41ngee/pydotaconstants) — l
 
 All game data is embedded directly in the binary at compile time via `include_str!`. No file I/O, no network calls.
 
-## Installation
-
-Add to your `Cargo.toml`:
-
-```toml
-[dependencies]
-rdotaconstants = "0.1"
-```
-
 ## Usage
 
 ```rust
