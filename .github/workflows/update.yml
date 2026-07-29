@@ -16,6 +16,8 @@ jobs:
     check:
         name: check for pydotaconstants changes
         runs-on: ubuntu-latest
+        env:
+            GH_TOKEN: ${{ github.token }}
         outputs:
             proceed: ${{ steps.check.outputs.proceed }}
             latest: ${{ steps.check.outputs.latest }}
@@ -27,7 +29,7 @@ jobs:
                 set -euo pipefail
                 latest=$(curl -sSf --retry 3 \
                     -H "Accept: application/vnd.github+json" \
-                    'https://api.github.com/repos/r41ngee/pydotaconstants/commits/main' \
+                    gh api 'repos/r41ngee/pydotaconstants/commits/main' \
                     | jq -r .sha)
                 current=$(cat pydotaconstants_commit.sha 2>/dev/null || echo "")
 
