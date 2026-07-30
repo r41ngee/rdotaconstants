@@ -27,9 +27,7 @@ jobs:
               id: check
               run: |
                 set -euo pipefail
-                latest=$(curl -sSf --retry 3 \
-                    -H "Accept: application/vnd.github+json" \
-                    gh api 'repos/r41ngee/pydotaconstants/commits/main' \
+                latest=$(gh api 'repos/r41ngee/pydotaconstants/commits/main' \
                     | jq -r .sha)
                 current=$(cat pydotaconstants_commit.sha 2>/dev/null || echo "")
 
