@@ -1,6 +1,6 @@
 [package]
 name = "rdotaconstants"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
 license = "MIT"

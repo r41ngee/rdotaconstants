@@ -1635,7 +1635,7 @@
         "ItemDeclarations": "DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS",
         "SuggestLategame": "1",
         "AbilityValues": {
-            "bonus_attack_speed": "35",
+            "bonus_attack_speed": "40",
             "bonus_gold": "160"
         }
     },
@@ -2124,13 +2124,14 @@
         "ItemDisplayCharges": "1",
         "ItemStackable": "0",
         "ItemPermanent": "1",
+        "ShowGiveIndicatorOnTargetCast": "1",
         "ItemCost": "825",
         "ItemShopTags": "regen_mana;str;boost_health;teamfight",
         "ItemQuality": "rare",
         "ItemDeclarations": "DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS",
         "SuggestLategame": "1",
         "AbilityValues": {
-            "mana_regen": "1.25",
+            "mana_regen": "1.0",
             "bonus_all_stats": "2",
             "bonus_armor": "2",
             "soul_radius": {
@@ -2498,7 +2499,7 @@
             "base_attack_range": "130",
             "push_length": "600",
             "enemy_length": "425",
-            "range_duration": "6",
+            "range_duration": "5",
             "cast_range_enemy": "425",
             "max_attacks": "5",
             "bonus_attack_speed": "100",
@@ -3068,7 +3069,7 @@
     },
     "item_recipe_shivas_guard": {
         "Model": "models/props_gameplay/recipe.vmdl",
-        "ItemCost": "1350",
+        "ItemCost": "1250",
         "ItemShopTags": "",
         "ItemRecipe": "1",
         "ItemResult": "item_shivas_guard",
@@ -3241,7 +3242,7 @@
             "bonus_agility": "6",
             "bonus_intellect": "24",
             "spell_amp": "10",
-            "mana_regen_multiplier": "35",
+            "mana_regen_multiplier": "25",
             "burn_dps_buildings": "50",
             "burn_dps_units": "50",
             "burn_slow": "20",
@@ -3342,7 +3343,7 @@
         "AbilityValues": {
             "bonus_intellect": "16",
             "spell_amp": "10",
-            "mana_regen_multiplier": "30"
+            "mana_regen_multiplier": "20"
         }
     },
     "item_trident": {
@@ -3387,9 +3388,9 @@
         "SpeciallyBannedFromNeutralSlot": "1",
         "CooldownPausedOutOfInventory": "1",
         "AbilityValues": {
-            "bonus_health_regen": "12",
-            "bonus_mana_regen": "6.0",
-            "bonus_damage": "20",
+            "bonus_health_regen": "0",
+            "bonus_mana_regen": "0.0",
+            "bonus_damage": "0",
             "refresh_items": "0"
         }
     },
@@ -3414,6 +3415,7 @@
         "ItemDisplayCharges": "1",
         "ItemStackable": "0",
         "ItemPermanent": "1",
+        "ShowGiveIndicatorOnTargetCast": "1",
         "ItemCost": "2725",
         "ItemShopTags": "teamfight",
         "ItemQuality": "rare",
@@ -3459,6 +3461,7 @@
         "ItemDisplayCharges": "1",
         "ItemStackable": "0",
         "ItemPermanent": "1",
+        "ShowGiveIndicatorOnTargetCast": "1",
         "ItemCost": "1775",
         "ItemShopTags": "teamfight",
         "ItemQuality": "rare",
@@ -3734,8 +3737,8 @@
                 "affected_by_aoe_increase": "1"
             },
             "movespeed_steal_pct": "6",
-            "active_health_steal": "75",
-            "stack_duration": "1.5"
+            "active_health_steal": "90",
+            "stack_duration": "2.0"
         }
     },
     "item_recipe_rapier": {
@@ -3843,10 +3846,10 @@
         "ItemDeclarations": "DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS",
         "SuggestLategame": "1",
         "AbilityValues": {
-            "bonus_agility": "35",
+            "bonus_agility": "30",
             "bonus_evasion": "35",
             "bonus_attack_speed_pct": "20",
-            "bonus_damage": "25"
+            "bonus_damage": "30"
         }
     },
     "item_recipe_greater_crit": {
@@ -4173,7 +4176,7 @@
             "bonus_strength": "16",
             "bonus_intellect": "16",
             "slow_resistance": "25",
-            "mana_regen_multiplier": "40",
+            "mana_regen_multiplier": "30",
             "spell_amp": "12",
             "hp_regen_amp": "16",
             "manacost_reduction": "25"
@@ -4200,7 +4203,7 @@
             "bonus_agility": "16",
             "bonus_intellect": "16",
             "bonus_attack_speed": "20",
-            "mana_regen_multiplier": "40",
+            "mana_regen_multiplier": "30",
             "movement_speed_percent_bonus_melee": "12",
             "movement_speed_percent_bonus": "12",
             "spell_amp": "12",
@@ -4221,7 +4224,7 @@
         "AbilityBehavior": "DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET",
         "FightRecapLevel": "2",
         "SpellDispellableType": "SPELL_DISPELLABLE_NO",
-        "AbilityCooldown": "30.0",
+        "AbilityCooldown": "40.0",
         "ItemCost": "5050",
         "ItemShopTags": "damage;str;armor;unique;hard_to_tag;dps",
         "ItemQuality": "artifact",
@@ -4302,9 +4305,9 @@
             "bonus_health": "0",
             "bonus_mana": "0",
             "cold_slow_melee": "-25",
-            "cold_attack_slow_melee": "-20",
+            "cold_attack_slow_melee": "-25",
             "cold_slow_ranged": "-50",
-            "cold_attack_slow_ranged": "-20",
+            "cold_attack_slow_ranged": "-25",
             "cold_duration": "3.0",
             "restoration_reduction": "50"
         }
@@ -4445,7 +4448,7 @@
     },
     "item_recipe_gungir": {
         "Model": "models/props_gameplay/recipe.vmdl",
-        "ItemCost": "400",
+        "ItemCost": "300",
         "ItemShopTags": "",
         "ItemRecipe": "1",
         "ItemResult": "item_gungir",
@@ -4561,9 +4564,10 @@
             "lifesteal_percent": "24",
             "berserk_bonus_attack_speed": "100",
             "berserk_bonus_movement_speed_melee": "12",
-            "berserk_bonus_movement_speed": "8",
+            "berserk_bonus_movement_speed": "6",
             "berserk_armor_reduction": "7",
-            "berserk_slow_resist": "30",
+            "berserk_slow_resist_melee": "30",
+            "berserk_slow_resist": "15",
             "berserk_duration": "6.0"
         }
     },
@@ -4790,7 +4794,7 @@
         "SuggestEarlygame": "1",
         "AbilityCooldown": "9.0",
         "AbilityValues": {
-            "damage": "10",
+            "damage": "12",
             "tick_interval": "1.0",
             "poison_duration": "3.0"
         }
@@ -4830,7 +4834,7 @@
             "corruption_armor": "-2",
             "slow_melee": "-8",
             "slow_ranged": "-16",
-            "heal_reduction": "16",
+            "heal_reduction": "18",
             "duration": "3.0",
             "bonus_agility": "7"
         }
@@ -4846,7 +4850,7 @@
             "slow_melee": "-6",
             "slow_ranged": "-13",
             "duration": "3",
-            "heal_reduction": "13"
+            "heal_reduction": "15"
         }
     },
     "item_recipe_falcon_blade": {
@@ -5164,7 +5168,7 @@
         "AbilityCooldown": "16",
         "AbilityCastRange": "900",
         "AbilityCastPoint": "0.0",
-        "AbilityManaCost": "50",
+        "AbilityManaCost": "25",
         "ItemCost": "1700",
         "ItemShopTags": "int;regen_health;hard_to_tag;magic_dmg",
         "ItemQuality": "rare",
@@ -5379,7 +5383,7 @@
         "SuggestLategame": "1",
         "AbilityValues": {
             "bonus_damage": "35",
-            "bonus_strength": "26",
+            "bonus_strength": "30",
             "slow_resistance": "30",
             "hp_regen_amp": "16",
             "bash_chance_melee": "25",
@@ -5405,7 +5409,7 @@
         "AbilityUnitTargetType": "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC",
         "SpellDispellableType": "SPELL_DISPELLABLE_YES_STRONG",
         "FightRecapLevel": "1",
-        "AbilityCooldown": "16",
+        "AbilityCooldown": "15",
         "AbilityCastRange": "750",
         "AbilityCastPoint": "0.0",
         "AbilityManaCost": "25",
@@ -7080,7 +7084,7 @@
         "AbilityUnitTargetType": "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC",
         "AbilitySound": "Brewmaster_Storm.DispelMagic",
         "AbilityCastRange": "700",
-        "AbilityCooldown": "40",
+        "AbilityCooldown": "30",
         "AbilityCastPoint": "0",
         "AbilityManaCost": "50",
         "ItemCost": "0",
@@ -7890,7 +7894,7 @@
         "MaxLevel": "2",
         "AbilityValues": {
             "cooldown_reduction": "15",
-            "cost_increase": "7"
+            "max_mana": "20"
         }
     },
     "item_enhancement_fleetfooted": {
@@ -7970,7 +7974,7 @@
         "Model": "models/props_gameplay/neutral_box.vmdl",
         "MaxLevel": "2",
         "AbilityValues": {
-            "bonus_gpm": "75 100",
+            "bonus_gpm": "65 90",
             "bonus_mana": "150 200",
             "bonus_damage": "-30 -60"
         }
@@ -8759,7 +8763,7 @@
         "AbilityValues": {
             "enchantment_bonus_base": "10",
             "enchantment_bonus_growth": {
-                "value": "40",
+                "value": "35",
                 "apply_curio_bonus": "1"
             },
             "current_bonus": {
@@ -8805,7 +8809,7 @@
                 "apply_curio_bonus": "1"
             },
             "damage_creep": {
-                "value": "30",
+                "value": "20",
                 "apply_curio_bonus": "1"
             },
             "cooldown": "0.1"
@@ -8860,7 +8864,7 @@
         "Model": "models/props_gameplay/neutral_box.vmdl",
         "MaxLevel": "1",
         "AbilityCooldown": "60",
-        "AbilityChannelTime": "1",
+        "AbilityChannelTime": "0.75",
         "HasSubAbility": "1",
         "SubAbilityNames": "item_foragers_health;item_foragers_stats;item_foragers_mana",
         "AbilityValues": {
@@ -8943,7 +8947,7 @@
     },
     "item_chasm_stone": {
         "AbilityBehavior": "DOTA_ABILITY_BEHAVIOR_PASSIVE",
-        "ItemCost": "800",
+        "ItemCost": "900",
         "ItemShopTags": "aoe",
         "ItemQuality": "component",
         "AbilityValues": {
