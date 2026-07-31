@@ -19271,7 +19271,7 @@
         "AbilityCastPoint": "0.01 0.01 0.01",
         "AbilityCastRange": "0",
         "AbilityCastAnimation": "ACT_DOTA_CAST_ABILITY_4",
-        "AbilityCooldown": "50.0 55.0 40.0",
+        "AbilityCooldown": "50.0 45.0 40.0",
         "AbilityManaCost": "175",
         "AbilityDamage": "250 325 400",
         "AbilityValues": {
