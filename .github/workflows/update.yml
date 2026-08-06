@@ -114,6 +114,10 @@ jobs:
         steps:
             - uses: actions/checkout@v5
             - uses: actions-rust-lang/setup-rust-toolchain@v1
+            - name: Pull new Cargo.toml
+              run: |
+                git fetch
+                git pull
             - run: cargo publish
 
     report:
