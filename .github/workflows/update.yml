@@ -3,6 +3,11 @@ name: check & update
 on:
     workflow_call:
     workflow_dispatch:
+    schedule:
+        - cron: "45 */2 * * *"
+          timezone: "Europe/Moscow"
+        - cron: "45 0-3,23 * * MON-FRI"
+          timezone: "Europe/Moscow"
 
 permissions:
     contents: write
