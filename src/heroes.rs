@@ -35,7 +35,7 @@ impl Hero {
     /// ```
     pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Result<T, errors::ResolveValueError> {
         let key = key.into();
-        let v = self.data.get(&key).ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))?;
+        let v = self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key))?;
         let rv = match v {
             Value::String(s) => Ok(s),
             _ => Err(errors::ResolveValueError::DepthQuery),
@@ -69,7 +69,7 @@ impl Hero {
     * ```
     */
     pub fn get_primary_attribute(&self) -> Result<PrimaryAttribute, errors::ResolveValueError> {
-        const KEY: &'static str = "AttributePrimary";
+        const KEY: &str = "AttributePrimary";
         let s: String = self.resolve_value(KEY)?;
         match s.as_str() {
             "DOTA_ATTRIBUTE_STRENGTH" => Ok(PrimaryAttribute::Strength),
@@ -149,7 +149,7 @@ impl Hero {
     pub fn get_by_display_name(display_name: &str) -> Option<Hero> {
         let map = parse_heroes();
         let locs = locals();
-        for (name, _) in map.iter() {
+        for name in map.keys() {
             let key = format!("{}:n", name);
             if locs.get(&key).map(|s| s.as_str()) == Some(display_name) {
                 return Self::get(name);
@@ -202,6 +202,7 @@ pub struct AttributeTable {
     pub intelligence_gain: f32,
 }
 
+#[allow(clippy::expect_used)]
 fn parse_heroes() -> &'static HashMap<String, serde_json::Map<String, Value>> {
     use std::sync::OnceLock;
     static ONCE: OnceLock<HashMap<String, serde_json::Map<String, Value>>> = OnceLock::new();

@@ -22,7 +22,7 @@ impl Item {
 
     pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Result<T, errors::ResolveValueError> {
         let key = key.into();
-        let v = self.data.get(&key).ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))?;
+        let v = self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key))?;
         let rv = match v {
             Value::String(s) => Ok(s),
             _ => Err(errors::ResolveValueError::DepthQuery),
@@ -37,7 +37,7 @@ impl Item {
         locals()
             .get(&key)
             .cloned()
-            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
+            .ok_or(errors::ResolveValueError::KeyNotFound(key))
     }
 
     /// Function that used to get a item's price,
@@ -104,6 +104,7 @@ impl Item {
     }
 }
 
+#[allow(clippy::expect_used)]
 fn parse_items() -> &'static HashMap<String, serde_json::Map<String, Value>> {
     use std::sync::OnceLock;
     static ONCE: OnceLock<HashMap<String, serde_json::Map<String, Value>>> = OnceLock::new();

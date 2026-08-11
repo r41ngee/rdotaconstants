@@ -25,7 +25,7 @@ impl Ability {
         locals()
             .get(&key)
             .cloned()
-            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
+            .ok_or(errors::ResolveValueError::KeyNotFound(key))
     }
 
     /// Method used to get ability UI description.
@@ -34,7 +34,7 @@ impl Ability {
         locals()
             .get(&key)
             .cloned()
-            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
+            .ok_or(errors::ResolveValueError::KeyNotFound(key))
     }
 
     /// Method used to get an [Ability] object by its slugname.
@@ -89,6 +89,7 @@ impl Ability {
     }
 }
 
+#[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static serde_json::Map<String, Value> {
     use std::sync::OnceLock;
     static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
