@@ -36,6 +36,42 @@ pub use heroes::Hero;
 pub use abilities::Ability;
 pub use items::Item;
 
+use crate::private::Sealed;
+
+/// Trait that descripts methods
+/// that works for both Ability and Item.
+pub trait Entity: Sealed {
+    /// Method used to get an entity slugname
+    fn name(&self) -> &str;
+    /// Method used to get ability/item display name.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Ability;
+    /// // Ability implements AbilityEnt
+    /// let ability = Ability::get("lion_impale").unwrap();
+    /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
+    /// let item
+    /// ```
+    fn display_name(&self) -> Result<String, errors::ResolveValueError> {
+        let key = format!("DOTA_Tooltip_ability_{}", self.name());
+        locals()
+            .get(&key)
+            .cloned()
+            .ok_or(errors::ResolveValueError::KeyNotFound(key))
+    }    
+    fn display_description(&self) -> Result<String, errors::ResolveValueError> {
+        let key = format!("DOTA_Tooltip_ability_{}_Description", self.name());
+        locals()
+            .get(&key)
+            .cloned()
+            .ok_or(errors::ResolveValueError::KeyNotFound(key))
+    }
+}
+
+mod private {
+    pub trait Sealed { }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

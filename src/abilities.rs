@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::{errors, locals};
+use crate::{Entity, errors, locals};
 
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
@@ -13,21 +13,6 @@ pub struct Ability {
 }
 
 impl Ability {
-    /// Method used to get ability display name.
-    /// # Example
-    /// ```
-    /// use rdotaconstants::Ability;
-    /// let ability = Ability::get("lion_impale").unwrap();
-    /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
-    /// ```
-    pub fn display_name(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}", self.name);
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or(errors::ResolveValueError::KeyNotFound(key))
-    }
-
     /// Method used to get ability UI description.
     pub fn display_description(&self) -> Result<String, errors::ResolveValueError> {
         let key = format!("DOTA_Tooltip_ability_{}_Description", self.name);
@@ -88,6 +73,13 @@ impl Ability {
             .collect()
     }
 }
+
+impl Entity for Ability {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+impl crate::private::Sealed for Ability {}
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static serde_json::Map<String, Value> {

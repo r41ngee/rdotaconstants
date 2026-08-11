@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use serde_json::Value;
 use std::str::FromStr;
 
-use crate::{errors, locals};
+use crate::{Entity, errors, locals};
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
 
@@ -103,6 +103,13 @@ impl Item {
             .collect()
     }
 }
+
+impl Entity for Item {
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+impl crate::private::Sealed for Item {}
 
 #[allow(clippy::expect_used)]
 fn parse_items() -> &'static HashMap<String, serde_json::Map<String, Value>> {
