@@ -67,22 +67,17 @@ impl Hero {
     * let hero = Hero::get("npc_dota_hero_axe").unwrap();
     * if let PrimaryAttribute::Strength = hero.get_primary_attribute().unwrap() {} else { panic!() }
     * ```
-    * 
-    * # Panics
-    * 1. `"AttributePrimary"` was not found in `heroes.json`
-    * 2. `"AttributePrimary"` is not value in `heroes.json`
-    * 3. `"AttributePrimary"` does not matches pattern `"DOTA_ATTRIBUTE_*"`
     */
     pub fn get_primary_attribute(&self) -> Result<PrimaryAttribute, errors::ResolveValueError> {
         const KEY: &'static str = "AttributePrimary";
         let s: String = self.resolve_value(KEY)?;
-        Ok(match s.as_str() {
-            "DOTA_ATTRIBUTE_STRENGTH" => PrimaryAttribute::Strength,
-            "DOTA_ATTRIBUTE_AGILITY" => PrimaryAttribute::Agility,
-            "DOTA_ATTRIBUTE_INTELLECT" => PrimaryAttribute::Intelligence,
-            "DOTA_ATTRIBUTE_ALL" => PrimaryAttribute::Universal,
-            _ => panic!(),
-        })
+        match s.as_str() {
+            "DOTA_ATTRIBUTE_STRENGTH" => Ok(PrimaryAttribute::Strength),
+            "DOTA_ATTRIBUTE_AGILITY" => Ok(PrimaryAttribute::Agility),
+            "DOTA_ATTRIBUTE_INTELLECT" => Ok(PrimaryAttribute::Intelligence),
+            "DOTA_ATTRIBUTE_ALL" => Ok(PrimaryAttribute::Universal),
+            _ => Err(errors::ResolveValueError::MismatchedPattern { value: s, pattern: "DOTA_ATTRIBUTE_*" }),
+        }
     }
 
     /// Returns an [AttributeTable] for this hero

@@ -6,7 +6,9 @@ pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
 #[derive(Debug, Clone)]
 pub struct Ability {
+    /// Ability slugname
     pub name: String,
+    /// Ability data as [`serde_json::Map`]
     pub data: serde_json::Map<String, Value>,
 }
 
@@ -49,8 +51,7 @@ impl Ability {
     }
 
     #[cfg(feature = "unstable")]
-    /// # Use `unstable` feature to use this function
-    /// This function us marked as unstable because
+    /// This function is marked as unstable because
     /// of undefined result for abilities with
     /// same name.
     /// 

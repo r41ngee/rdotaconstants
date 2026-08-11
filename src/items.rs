@@ -69,6 +69,13 @@ impl Item {
         })
     }
 
+    /// This function is marked as unstable because
+    /// of undefined result for abilities with
+    /// same name.
+    /// 
+    /// There is no known examples of
+    /// this behavior, but this function
+    /// is still unsafe for future.
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();

@@ -3,6 +3,8 @@
  * 
  * Currently supports [Ability], [Item], [Hero] and [locals] objects.
  */
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 pub mod heroes;
 pub mod abilities;
 pub mod items;
