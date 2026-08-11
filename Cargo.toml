@@ -8,6 +8,7 @@ repository = "https://github.com/r41ngee/rdotaconstants"
 exclude = [
     ".github/",
     "pydotaconstants_commit.sha",
+    "local_upd.sh",
 ]
 
 [features]
