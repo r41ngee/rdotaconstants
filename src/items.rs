@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use serde_json::Value;
-use std::str::FromStr;
 
 use crate::{Entity, errors, locals};
 
@@ -20,15 +19,9 @@ impl Item {
     // METHODS
     // -----------------------------------------------------------------------------------------
 
-    pub fn resolve_value<T: FromStr, S: Into<String>>(&self, key: S) -> Result<T, errors::ResolveValueError> {
+    pub fn resolve_value<S: Into<String>>(&self, key: S) -> Result<Value, errors::ResolveValueError> {
         let key = key.into();
-        let v = self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key))?;
-        let rv = match v {
-            Value::String(s) => Ok(s),
-            _ => Err(errors::ResolveValueError::DepthQuery),
-        }?;
-        let parsed = rv.parse::<T>();
-        parsed.map_err(|_| errors::ResolveValueError::StringParseFail(rv.to_string()))
+        self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key)).cloned()
     }
 
     /// Method that returns item's display name.
@@ -49,8 +42,13 @@ impl Item {
     /// let item = Item::get("item_blink").unwrap();
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
-    pub fn get_cost(&self) -> Result<i32, errors::ResolveValueError> {
-        self.resolve_value("ItemCost")
+    pub fn get_cost(&self) -> Option<i32> {
+        let value = self.resolve_value("ItemCost").ok()?;
+        if let Value::String(s) = value {
+            s.parse().ok()
+        } else {
+            None
+        }
     }
 
     // -----------------------------------------------------------------------------------------
