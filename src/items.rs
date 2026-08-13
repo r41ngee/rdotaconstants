@@ -19,6 +19,15 @@ impl Item {
     // METHODS
     // -----------------------------------------------------------------------------------------
 
+    /// Returns an a object hidden by
+    /// given key.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::Item;
+    /// use serde_json::Value;
+    /// let item = Item::get("item_abyssal_blade").unwrap();
+    /// assert_eq!(item.resolve_value("AbilityBehavior").unwrap(), Value::String("DOTA_ABILITY_BEHAVIOR_UNIT_TARGET".to_string()))
+    /// ```
     pub fn resolve_value<S: Into<String>>(&self, key: S) -> Result<Value, errors::ResolveValueError> {
         let key = key.into();
         self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key)).cloned()

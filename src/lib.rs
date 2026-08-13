@@ -44,13 +44,20 @@ pub trait Entity: Sealed {
     /// Method used to get an entity slugname
     fn name(&self) -> &str;
     /// Method used to get ability/item display name.
-    /// # Example
+    /// # Examples
+    /// ## w/ [`Ability`]
     /// ```
-    /// use rdotaconstants::Ability;
+    /// use rdotaconstants::{Entity, Ability};
     /// // Ability implements AbilityEnt
     /// let ability = Ability::get("lion_impale").unwrap();
     /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
-    /// let item
+    /// ```
+    /// ## w/ [`Item`]
+    /// ```
+    /// use rdotaconstants::{Entity, Item};
+    /// // Item implements AbilityEnt
+    /// let item = Item::get("item_abyssal_blade").unwrap();
+    /// assert_eq!(item.display_name().unwrap(), "Abyssal Blade");
     /// ```
     fn display_name(&self) -> Result<String, errors::ResolveValueError> {
         let key = format!("DOTA_Tooltip_ability_{}", self.name());
