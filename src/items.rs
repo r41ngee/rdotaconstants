@@ -1,6 +1,8 @@
 use serde_json::Value;
 
-use crate::{Entity, locals};
+use crate::Entity;
+#[cfg(feature = "unstable")]
+use crate::locals;
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
 
@@ -8,9 +10,9 @@ pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
 #[derive(Debug, Clone)]
 pub struct Item {
     /// Item's slugname
-    pub name: String,
+    name: String,
     /// Item's additional data
-    pub data: serde_json::Map<String, Value>,
+    data: serde_json::Map<String, Value>,
 }
 
 impl Item {
