@@ -1,82 +1,44 @@
 use serde_json::Value;
 
-use crate::{Entity, errors, locals};
+use crate::Entity;
 
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
 #[derive(Debug, Clone)]
 pub struct Ability {
     /// Ability slugname
-    pub name: String,
+    name: String,
     /// Ability data as [`serde_json::Map`]
-    pub data: serde_json::Map<String, Value>,
-}
-
-impl Ability {
-    /// Method used to get ability UI description.
-    pub fn display_description(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}_Description", self.name);
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or(errors::ResolveValueError::KeyNotFound(key))
-    }
-
-    /// Method used to get an [Ability] object by its slugname.
-    /// Returns [Option]<[Ability]>
-    pub fn get<T: AsRef<str>>(name: T) -> Option<Ability> {
-        let map = parse_abilities();
-        let key = name.as_ref();
-        let val = map.get(key)?;
-        let data = val.as_object()?.clone();
-        Some(Ability {
-            name: key.to_string(),
-            data,
-        })
-    }
-
-    #[cfg(feature = "unstable")]
-    /// This function is marked as unstable because
-    /// of undefined result for abilities with
-    /// same name.
-    /// 
-    /// For example, Lion's **Hex** and Shadow Shaman's **Hex** will return 
-    /// undefined result.
-    pub fn get_by_display_name(display_name: &str) -> Option<Ability> {
-        let locs = locals();
-        let prefix = "DOTA_Tooltip_ability_";
-        for (key, value) in locs.iter() {
-            if value == display_name {
-                if let Some(codename) = key.strip_prefix(prefix) {
-                    if !codename.ends_with("_Description") {
-                        if let Some(ability) = Self::get(codename) {
-                            return Some(ability);
-                        }
-                    }
-                }
-            }
-        }
-        None
-    }
-
-    /// Returns [Vec] containing all possible variants of [Ability].
-    pub fn all() -> Vec<Ability> {
-        let map = parse_abilities();
-        map.iter()
-            .filter_map(|(k, v)| {
-                let data = v.as_object()?.clone();
-                Some(Ability {
-                    name: k.clone(),
-                    data,
-                })
-            })
-            .collect()
-    }
+    data: serde_json::Map<String, Value>,
 }
 
 impl Entity for Ability {
     fn name(&self) -> &str {
         &self.name
+    }
+
+    fn data(&self) -> &serde_json::Map<String, Value> {
+        &self.data
+    }
+
+    fn get_self<S: AsRef<str>>(name: S) -> Option<Self> {
+        let abilities = parse_abilities();
+        let raw = abilities.get_key_value(name.as_ref())?;
+        if let Value::Object(o) = raw.1 {
+                Some(Self { name: raw.0.clone(), data: o.clone() })
+        } else { None }
+    }
+
+    fn all() -> Vec<Self> {
+        let mut result = Vec::new();
+        let all_abilities = parse_abilities();
+        for k in all_abilities.keys() {
+            if let Some(ability) = Self::get_self(k) {
+                result.push(ability);
+            }
+        }
+
+        result
     }
 }
 impl crate::private::Sealed for Ability {}

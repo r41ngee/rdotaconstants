@@ -1,7 +1,6 @@
-use std::collections::HashMap;
 use serde_json::Value;
 
-use crate::{Entity, errors, locals};
+use crate::{Entity, locals};
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
 
@@ -19,19 +18,6 @@ impl Item {
     // METHODS
     // -----------------------------------------------------------------------------------------
 
-    /// Returns an a object hidden by
-    /// given key.
-    /// # Example
-    /// ```
-    /// use rdotaconstants::Item;
-    /// use serde_json::Value;
-    /// let item = Item::get("item_abyssal_blade").unwrap();
-    /// assert_eq!(item.resolve_value("AbilityBehavior").unwrap(), Value::String("DOTA_ABILITY_BEHAVIOR_UNIT_TARGET".to_string()))
-    /// ```
-    pub fn resolve_value<S: AsRef<str>>(&self, key: S) -> Result<Value, errors::ResolveValueError> {
-        self.data.get(key.as_ref()).ok_or(errors::ResolveValueError::KeyNotFound(key.as_ref().to_string())).cloned()
-    }
-
     /// Function that used to get a item's price,
     /// if it has one.
     /// 
@@ -42,7 +28,7 @@ impl Item {
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
     pub fn get_cost(&self) -> Option<i32> {
-        let value = self.resolve_value("ItemCost").ok()?;
+        let value = self.get("ItemCost")?;
         if let Value::String(s) = value {
             s.parse().ok()
         } else {
@@ -53,18 +39,6 @@ impl Item {
     // -----------------------------------------------------------------------------------------
     // FUNCTIONS
     // -----------------------------------------------------------------------------------------
-
-    /// Function that used to get an [Item] object
-    /// from its slugname.
-    pub fn get<T: AsRef<str>>(name: T) -> Option<Item> {
-        let map = parse_items();
-        let key = name.as_ref();
-        let raw = map.get(key)?;
-        Some(Item {
-            name: key.to_string(),
-            data: raw.clone(),
-        })
-    }
 
     /// This function is marked as unstable because
     /// of undefined result for abilities with
@@ -80,7 +54,7 @@ impl Item {
         for (key, value) in locs.iter() {
             if value == display_name {
                 if let Some(codename) = key.strip_prefix(prefix) {
-                    if let Some(item) = Self::get(codename) {
+                    if let Some(item) = Self::get_self(codename) {
                         return Some(item);
                     }
                 }
@@ -88,31 +62,52 @@ impl Item {
         }
         None
     }
-
-    /// Returns [Vec] with all possible variants of [Item].
-    pub fn all() -> Vec<Item> {
-        let map = parse_items();
-        map.iter()
-            .map(|(k, v)| Item {
-                name: k.clone(),
-                data: v.clone(),
-            })
-            .collect()
-    }
 }
 
 impl Entity for Item {
     fn name(&self) -> &str {
         &self.name
     }
+
+    fn data(&self) -> &serde_json::Map<String, Value> {
+        &self.data
+    }
+
+    fn get_self<S: AsRef<str>>(name: S) -> Option<Self> {
+        let items = parse_items();
+        let raw = items.get_key_value(name.as_ref())?;
+        if let Value::Object(o) = raw.1 {
+                Some(Self { name: raw.0.clone(), data: o.clone() })
+        } else { None }
+    }
+
+    fn all() -> Vec<Self> {
+        let mut result = Vec::new();
+        let items = parse_items();
+        for i in items.keys() {
+            if let Some(item) = Self::get_self(i) {
+                result.push(item);
+            }
+        }
+
+        result
+    }
 }
 impl crate::private::Sealed for Item {}
 
 #[allow(clippy::expect_used)]
-fn parse_items() -> &'static HashMap<String, serde_json::Map<String, Value>> {
+fn parse_items() -> &'static serde_json::Map<String, Value> {
     use std::sync::OnceLock;
-    static ONCE: OnceLock<HashMap<String, serde_json::Map<String, Value>>> = OnceLock::new();
+    static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
     ONCE.get_or_init(|| {
-        serde_json::from_str(ITEMS_JSON).expect("failed to parse items.json")
+        let raw: serde_json::Map<String, Value> =
+            serde_json::from_str(ITEMS_JSON).expect("failed to parse abilities.json");
+        let mut filtered = serde_json::Map::new();
+        for (k, v) in raw {
+            if v.is_object() {
+                filtered.insert(k, v);
+            }
+        }
+        filtered
     })
 }

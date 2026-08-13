@@ -12,7 +12,12 @@
 pub mod heroes;
 pub mod abilities;
 pub mod items;
-pub mod errors;
+pub mod entity;
+
+pub use heroes::Hero;
+pub use abilities::Ability;
+pub use items::Item;
+pub use entity::Entity;
 
 use std::collections::HashMap;
 use std::sync::OnceLock;
@@ -32,117 +37,6 @@ pub fn locals() -> &'static HashMap<String, String> {
     })
 }
 
-pub use heroes::Hero;
-pub use abilities::Ability;
-pub use items::Item;
-
-use crate::private::Sealed;
-
-/// Trait that descripts methods
-/// that works for both Ability and Item.
-pub trait Entity: Sealed {
-    /// Method used to get an entity slugname
-    fn name(&self) -> &str;
-    /// Method used to get ability/item display name.
-    /// # Examples
-    /// ## w/ [`Ability`]
-    /// ```
-    /// use rdotaconstants::{Entity, Ability};
-    /// // Ability implements AbilityEnt
-    /// let ability = Ability::get("lion_impale").unwrap();
-    /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
-    /// ```
-    /// ## w/ [`Item`]
-    /// ```
-    /// use rdotaconstants::{Entity, Item};
-    /// // Item implements AbilityEnt
-    /// let item = Item::get("item_abyssal_blade").unwrap();
-    /// assert_eq!(item.display_name().unwrap(), "Abyssal Blade");
-    /// ```
-    fn display_name(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}", self.name());
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or(errors::ResolveValueError::KeyNotFound(key))
-    }    
-    fn display_description(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}_Description", self.name());
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or(errors::ResolveValueError::KeyNotFound(key))
-    }
-}
-
 mod private {
     pub trait Sealed { }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_hero_get() {
-        let hero = Hero::get("npc_dota_hero_axe").unwrap();
-        assert_eq!(hero.id, 2);
-        assert_eq!(hero.display_name(), "Axe");
-    }
-
-    #[test]
-    fn test_hero_get_by_id() {
-        let hero = Hero::get_by_id(1).unwrap();
-        assert_eq!(hero.name, "npc_dota_hero_antimage");
-    }
-
-    #[test]
-    fn test_hero_get_by_display_name() {
-        let hero = Hero::get_by_display_name("Anti-Mage").unwrap();
-        assert_eq!(hero.name, "npc_dota_hero_antimage");
-    }
-
-    #[test]
-    fn test_hero_all() {
-        let all = Hero::all();
-        assert!(all.len() > 100);
-    }
-
-    #[test]
-    fn test_ability_get() {
-        let ability = Ability::get("antimage_mana_break").unwrap();
-        assert_eq!(ability.display_name().unwrap(), "Mana Break");
-    }
-
-    #[test]
-    fn test_ability_display_description() {
-        let ability = Ability::get("antimage_mana_break").unwrap();
-        let desc = ability.display_description();
-        assert!(!desc.unwrap().is_empty());
-    }
-
-    #[test]
-    fn test_ability_all() {
-        let all = Ability::all();
-        assert!(all.len() > 1000);
-    }
-
-    #[test]
-    fn test_item_get() {
-        let item = Item::get("item_blink").unwrap();
-        assert_eq!(item.display_name().unwrap(), "Blink Dagger");
-    }
-
-    #[test]
-    fn test_item_all() {
-        let all = Item::all();
-        assert!(all.len() > 500);
-    }
-
-    #[test]
-    fn test_locals() {
-        let l = locals();
-        assert!(l.len() > 50000);
-        assert_eq!(l.get("npc_dota_hero_axe:n").unwrap(), "Axe");
-    }
 }
