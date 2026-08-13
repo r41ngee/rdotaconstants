@@ -28,9 +28,8 @@ impl Item {
     /// let item = Item::get("item_abyssal_blade").unwrap();
     /// assert_eq!(item.resolve_value("AbilityBehavior").unwrap(), Value::String("DOTA_ABILITY_BEHAVIOR_UNIT_TARGET".to_string()))
     /// ```
-    pub fn resolve_value<S: Into<String>>(&self, key: S) -> Result<Value, errors::ResolveValueError> {
-        let key = key.into();
-        self.data.get(&key).ok_or(errors::ResolveValueError::KeyNotFound(key)).cloned()
+    pub fn resolve_value<S: AsRef<str>>(&self, key: S) -> Result<Value, errors::ResolveValueError> {
+        self.data.get(key.as_ref()).ok_or(errors::ResolveValueError::KeyNotFound(key.as_ref().to_string())).cloned()
     }
 
     /// Method that returns item's display name.
