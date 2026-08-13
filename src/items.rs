@@ -32,15 +32,6 @@ impl Item {
         self.data.get(key.as_ref()).ok_or(errors::ResolveValueError::KeyNotFound(key.as_ref().to_string())).cloned()
     }
 
-    /// Method that returns item's display name.
-    pub fn display_name(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_Ability_{}", self.name);
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or(errors::ResolveValueError::KeyNotFound(key))
-    }
-
     /// Function that used to get a item's price,
     /// if it has one.
     /// 
