@@ -89,6 +89,7 @@ jobs:
                     git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
                     echo "$LATEST" > pydotaconstants_commit.sha
+                    git pull
 
                     if git diff --quiet src/data/; then
                         echo "No constant changes. Advancing pydotaconstants tracker only."
