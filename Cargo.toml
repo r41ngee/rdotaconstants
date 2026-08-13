@@ -1,6 +1,6 @@
 [package]
 name = "rdotaconstants"
-version = "0.2.11"
+version = "0.3.0"
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
 license = "MIT"
@@ -11,6 +11,10 @@ exclude = [
     "local_upd.sh",
 ]
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
 [features]
 default = []
 unstable = []
@@ -18,7 +22,3 @@ unstable = []
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
-[package.metadata.docs.rs]
-all-features = true
-rustdoc-args = ["--cfg", "docsrs"]
