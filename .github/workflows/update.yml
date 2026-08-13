@@ -104,7 +104,8 @@ jobs:
                         cargo bump patch
                         cargo c
                         git add -A
-                        git commit -m "Update constants from pydotaconstants ${LATEST}"
+                        PATCH=$(curl -sL https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/current_patch.md)
+                        git commit -m "patch(${PATCH}): update constants from pydotaconstants ${LATEST}"
                         git push
                         echo "data_change=true" >> "$GITHUB_OUTPUT"
                     fi
