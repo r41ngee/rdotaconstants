@@ -4,7 +4,7 @@ use crate::{Entity, locals};
 
 pub(crate) static HEROES_JSON: &str = include_str!("data/heroes.json");
 
-/// Struct that represents hero object and its data
+/// Represents hero's data
 #[derive(Debug, Clone)]
 pub struct Hero {
     /// Hero's slugname
@@ -16,7 +16,7 @@ pub struct Hero {
 }
 
 impl Hero {
-    /// Method used to get hero display name.
+    /// Get hero display name.
     /// # Example
     /// ```
     /// use rdotaconstants::Hero;
