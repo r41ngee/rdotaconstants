@@ -25,8 +25,8 @@ impl Item {
     /// 
     /// # Example
     /// ```
-    /// use rdotaconstants::Item;
-    /// let item = Item::get("item_blink").unwrap();
+    /// use rdotaconstants::{Item, Entity};
+    /// let item = Item::get_self("item_blink").unwrap();
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
     pub fn get_cost(&self) -> Option<i32> {

@@ -5,6 +5,7 @@ use crate::Entity;
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
 #[derive(Debug, Clone)]
+/// Represents ability data
 pub struct Ability {
     /// Ability slugname
     name: String,

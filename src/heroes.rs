@@ -19,8 +19,8 @@ impl Hero {
     /// Get hero display name.
     /// # Example
     /// ```
-    /// use rdotaconstants::Hero;
-    /// let hero = Hero::get("npc_dota_hero_abyssal_underlord").unwrap();
+    /// use rdotaconstants::{Hero, Entity};
+    /// let hero = Hero::get_self("npc_dota_hero_abyssal_underlord").unwrap();
     /// assert_eq!(hero.display_name(), "Underlord");
     /// ```
     pub fn display_name(&self) -> String {
@@ -31,6 +31,13 @@ impl Hero {
             .unwrap_or_default()
     }
 
+    /// Get hero id.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::{Hero, Entity};
+    /// let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+    /// assert_eq!(hero.id(), 1);
+    /// ```
     pub fn id(&self) -> i64 {
         self.id
     }
