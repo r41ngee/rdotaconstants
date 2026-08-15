@@ -22,7 +22,7 @@ impl Entity for Ability {
         &self.data
     }
 
-    fn get_self<S: AsRef<str>>(name: S) -> Option<Self> {
+    fn new<S: AsRef<str>>(name: S) -> Option<Self> {
         let abilities = parse_abilities();
         let raw = abilities.get_key_value(name.as_ref())?;
         if let Value::Object(o) = raw.1 {
@@ -34,7 +34,7 @@ impl Entity for Ability {
         let mut result = Vec::new();
         let all_abilities = parse_abilities();
         for k in all_abilities.keys() {
-            if let Some(ability) = Self::get_self(k) {
+            if let Some(ability) = Self::new(k) {
                 result.push(ability);
             }
         }
@@ -67,14 +67,14 @@ mod tests {
 
     #[test]
     fn get_self() {
-        let ability = Ability::get_self("meepo_earthbind");
+        let ability = Ability::new("meepo_earthbind");
 
         assert!(ability.is_some());
     }
 
     #[test]
     fn get_self_fail() {
-        let ability = Ability::get_self("meepo_fucking_shit");
+        let ability = Ability::new("meepo_fucking_shit");
 
         assert!(ability.is_none());
     }
@@ -82,19 +82,19 @@ mod tests {
     #[test]
     fn name_getter() {
         let ab_name = "meepo_earthbind";
-        let ab = Ability::get_self(ab_name).unwrap();
+        let ab = Ability::new(ab_name).unwrap();
         assert_eq!(ab_name, ab.name())
     }
 
     #[test]
     fn data_getter() {
-        let ability = Ability::get_self("meepo_earthbind").unwrap();
+        let ability = Ability::new("meepo_earthbind").unwrap();
         assert!(!ability.data().is_empty())
     }
 
     #[test]
     fn data_getter_truth() {
-        let ability = Ability::get_self("meepo_earthbind").unwrap();
+        let ability = Ability::new("meepo_earthbind").unwrap();
         let data = ability.data();
         assert_eq!(data.get("AbilitySound").unwrap(), "Hero_Meepo.Earthbind.Cast");
     }

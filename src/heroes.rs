@@ -20,7 +20,7 @@ impl Hero {
     /// # Example
     /// ```
     /// use rdotaconstants::{Hero, Entity};
-    /// let hero = Hero::get_self("npc_dota_hero_abyssal_underlord").unwrap();
+    /// let hero = Hero::new("npc_dota_hero_abyssal_underlord").unwrap();
     /// assert_eq!(hero.display_name(), "Underlord");
     /// ```
     pub fn display_name(&self) -> String {
@@ -35,7 +35,7 @@ impl Hero {
     /// # Example
     /// ```
     /// use rdotaconstants::{Hero, Entity};
-    /// let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+    /// let hero = Hero::new("npc_dota_hero_antimage").unwrap();
     /// assert_eq!(hero.id(), 1);
     /// ```
     pub fn id(&self) -> i64 {
@@ -48,7 +48,7 @@ impl Entity for Hero {
     fn data(&self) -> &serde_json::Map<String, Value> {
         &self.data
     }
-    fn get_self<S: AsRef<str>>(s: S) -> Option<Self> {
+    fn new<S: AsRef<str>>(s: S) -> Option<Self> {
         let name = s.as_ref();
         let heroes = parse_heroes();
         if let Value::Object(o) = heroes.get(name)? {
@@ -65,7 +65,7 @@ impl Entity for Hero {
         let mut result = Vec::new();
         let parsed = parse_heroes();
         for i in parsed.keys() {
-            if let Some(h) = Self::get_self(i) {
+            if let Some(h) = Self::new(i) {
                 result.push(h);
             }
         }
@@ -89,43 +89,43 @@ mod tests {
 
     #[test]
     fn get_self() {
-        Hero::get_self("npc_dota_hero_antimage").unwrap();
+        Hero::new("npc_dota_hero_antimage").unwrap();
     }
 
     #[test]
     #[should_panic]
     fn get_self_fake() {
-        Hero::get_self("sometypeofshit").unwrap();
+        Hero::new("sometypeofshit").unwrap();
     }
 
     #[test]
     fn name_getter() {
         let name = "npc_dota_hero_antimage";
-        let hero = Hero::get_self(name).unwrap();
+        let hero = Hero::new(name).unwrap();
         assert_eq!(name, hero.name());
     }
 
     #[test]
     fn data_getter() {
-        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        let hero = Hero::new("npc_dota_hero_antimage").unwrap();
         assert!(!hero.data().is_empty());
     }
 
     #[test]
     fn data_getter_truth() {
-        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        let hero = Hero::new("npc_dota_hero_antimage").unwrap();
         assert_eq!(hero.data().get("CMEnabled").unwrap(), "1");
     }
 
     #[test]
     fn display_name() {
-        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        let hero = Hero::new("npc_dota_hero_antimage").unwrap();
         assert_eq!(hero.display_name(), "Anti-Mage");
     }
 
     #[test]
     fn id() {
-        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        let hero = Hero::new("npc_dota_hero_antimage").unwrap();
         assert_eq!(hero.id(), 1);
     }
 

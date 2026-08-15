@@ -14,7 +14,7 @@ pub trait Entity: Sealed + Sized {
     fn data(&self) -> &Map<String, Value>;
     /// Returns an object of implementing class by its
     /// slugname.
-    fn get_self<S: AsRef<str>>(s: S) -> Option<Self>;
+    fn new<S: AsRef<str>>(s: S) -> Option<Self>;
     /// Returns all possible variants
     /// of this ability.
     fn all() -> Vec<Self>;

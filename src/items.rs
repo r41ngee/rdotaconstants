@@ -26,7 +26,7 @@ impl Item {
     /// # Example
     /// ```
     /// use rdotaconstants::{Item, Entity};
-    /// let item = Item::get_self("item_blink").unwrap();
+    /// let item = Item::new("item_blink").unwrap();
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
     pub fn get_cost(&self) -> Option<i32> {
@@ -56,7 +56,7 @@ impl Item {
         for (key, value) in locs.iter() {
             if value == display_name {
                 if let Some(codename) = key.strip_prefix(prefix) {
-                    if let Some(item) = Self::get_self(codename) {
+                    if let Some(item) = Self::new(codename) {
                         return Some(item);
                     }
                 }
@@ -75,7 +75,7 @@ impl Entity for Item {
         &self.data
     }
 
-    fn get_self<S: AsRef<str>>(name: S) -> Option<Self> {
+    fn new<S: AsRef<str>>(name: S) -> Option<Self> {
         let items = parse_items();
         let raw = items.get_key_value(name.as_ref())?;
         if let Value::Object(o) = raw.1 {
@@ -87,7 +87,7 @@ impl Entity for Item {
         let mut result = Vec::new();
         let items = parse_items();
         for i in items.keys() {
-            if let Some(item) = Self::get_self(i) {
+            if let Some(item) = Self::new(i) {
                 result.push(item);
             }
         }
@@ -120,30 +120,30 @@ mod tests {
 
     #[test]
     fn get_self() {
-        Item::get_self("item_aeon_disk").unwrap();
+        Item::new("item_aeon_disk").unwrap();
     }
 
     #[test]
     #[should_panic]
     fn get_self_fake() {
-        Item::get_self("item_anjdsdjknasnjska").unwrap();
+        Item::new("item_anjdsdjknasnjska").unwrap();
     }
 
     #[test]
     fn name_getter() {
         let name = "item_aeon_disk";
-        let item = Item::get_self(name).unwrap();
+        let item = Item::new(name).unwrap();
         assert_eq!(name, item.name())
     }
 
     #[test]
     fn data_getter() {
-        assert!(!Item::get_self("item_aeon_disk").unwrap().data().is_empty());
+        assert!(!Item::new("item_aeon_disk").unwrap().data().is_empty());
     }
 
     #[test]
     fn get_cost() {
-        let item = Item::get_self("item_aeon_disk").unwrap();
+        let item = Item::new("item_aeon_disk").unwrap();
         assert_eq!(item.get_cost().unwrap(), 3000);
     }
 
