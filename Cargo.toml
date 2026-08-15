@@ -1,6 +1,6 @@
 [package]
 name = "rdotaconstants"
-version = "0.2.13"
+version = "0.3.0"
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
 license = "MIT"
@@ -8,7 +8,12 @@ repository = "https://github.com/r41ngee/rdotaconstants"
 exclude = [
     ".github/",
     "pydotaconstants_commit.sha",
+    "local_upd.sh",
 ]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
 default = []

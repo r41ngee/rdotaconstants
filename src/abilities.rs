@@ -1,93 +1,50 @@
 use serde_json::Value;
 
-use crate::{errors, locals};
+use crate::Entity;
 
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
 #[derive(Debug, Clone)]
+/// Represents ability data
 pub struct Ability {
-    pub name: String,
-    pub data: serde_json::Map<String, Value>,
+    /// Ability slugname
+    name: String,
+    /// Ability data as [`serde_json::Map`]
+    data: serde_json::Map<String, Value>,
 }
 
-impl Ability {
-    /// Method used to get ability display name.
-    /// # Example
-    /// ```
-    /// use rdotaconstants::Ability;
-    /// let ability = Ability::get("lion_impale").unwrap();
-    /// assert_eq!(ability.display_name().unwrap(), "Earth Spike");
-    /// ```
-    pub fn display_name(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}", self.name);
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
+impl Entity for Ability {
+    fn name(&self) -> &str {
+        &self.name
     }
 
-    /// Method used to get ability UI description.
-    pub fn display_description(&self) -> Result<String, errors::ResolveValueError> {
-        let key = format!("DOTA_Tooltip_ability_{}_Description", self.name);
-        locals()
-            .get(&key)
-            .cloned()
-            .ok_or_else(|| errors::ResolveValueError::KeyNotFound(key))
+    fn data(&self) -> &serde_json::Map<String, Value> {
+        &self.data
     }
 
-    /// Method used to get an [Ability] object by its slugname.
-    /// Returns [Option]<[Ability]>
-    pub fn get<T: AsRef<str>>(name: T) -> Option<Ability> {
-        let map = parse_abilities();
-        let key = name.as_ref();
-        let val = map.get(key)?;
-        let data = val.as_object()?.clone();
-        Some(Ability {
-            name: key.to_string(),
-            data,
-        })
+    fn new<S: AsRef<str>>(name: S) -> Option<Self> {
+        let abilities = parse_abilities();
+        let raw = abilities.get_key_value(name.as_ref())?;
+        if let Value::Object(o) = raw.1 {
+                Some(Self { name: raw.0.clone(), data: o.clone() })
+        } else { None }
     }
 
-    #[cfg(feature = "unstable")]
-    /// # Use `unstable` feature to use this function
-    /// This function us marked as unstable because
-    /// of undefined result for abilities with
-    /// same name.
-    /// 
-    /// For example, Lion's **Hex** and Shadow Shaman's **Hex** will return 
-    /// undefined result.
-    pub fn get_by_display_name(display_name: &str) -> Option<Ability> {
-        let locs = locals();
-        let prefix = "DOTA_Tooltip_ability_";
-        for (key, value) in locs.iter() {
-            if value == display_name {
-                if let Some(codename) = key.strip_prefix(prefix) {
-                    if !codename.ends_with("_Description") {
-                        if let Some(ability) = Self::get(codename) {
-                            return Some(ability);
-                        }
-                    }
-                }
+    fn all() -> Vec<Self> {
+        let mut result = Vec::new();
+        let all_abilities = parse_abilities();
+        for k in all_abilities.keys() {
+            if let Some(ability) = Self::new(k) {
+                result.push(ability);
             }
         }
-        None
-    }
 
-    /// Returns [Vec] containing all possible variants of [Ability].
-    pub fn all() -> Vec<Ability> {
-        let map = parse_abilities();
-        map.iter()
-            .filter_map(|(k, v)| {
-                let data = v.as_object()?.clone();
-                Some(Ability {
-                    name: k.clone(),
-                    data,
-                })
-            })
-            .collect()
+        result
     }
 }
+impl crate::private::Sealed for Ability {}
 
+#[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static serde_json::Map<String, Value> {
     use std::sync::OnceLock;
     static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
@@ -102,4 +59,68 @@ fn parse_abilities() -> &'static serde_json::Map<String, Value> {
         }
         filtered
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    #[test]
+    fn get_self() {
+        let ability = Ability::new("meepo_earthbind");
+
+        assert!(ability.is_some());
+    }
+
+    #[test]
+    fn get_self_fail() {
+        let ability = Ability::new("meepo_fucking_shit");
+
+        assert!(ability.is_none());
+    }
+
+    #[test]
+    fn name_getter() {
+        let ab_name = "meepo_earthbind";
+        let ab = Ability::new(ab_name).unwrap();
+        assert_eq!(ab_name, ab.name())
+    }
+
+    #[test]
+    fn data_getter() {
+        let ability = Ability::new("meepo_earthbind").unwrap();
+        assert!(!ability.data().is_empty())
+    }
+
+    #[test]
+    fn data_getter_truth() {
+        let ability = Ability::new("meepo_earthbind").unwrap();
+        let data = ability.data();
+        assert_eq!(data.get("AbilitySound").unwrap(), "Hero_Meepo.Earthbind.Cast");
+    }
+
+    #[test]
+    fn get_all() {
+        let r#abilities = Ability::all();
+        assert!(!abilities.is_empty());
+    }
+
+    #[test]
+    fn entity_get() {
+        use serde_json::{Map, Value};
+
+        let ability = Ability {
+            name: "test".to_string(),
+            data: Map::from_iter([
+                ("foo".to_string(), Value::String("bar".to_string())),
+            ]),
+        };
+
+        assert_eq!(
+            ability.get("foo"),
+            Some(Value::String("bar".to_string()))
+        );
+
+        assert_eq!(ability.get("missing"), None);
+    }
 }
