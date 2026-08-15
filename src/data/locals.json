@@ -15132,6 +15132,7 @@
     "DOTA_Hotkeys_UnitActions": "UNIT ACTIONS",
     "DOTA_HowItWorks": "How it works",
     "DOTA_HowToPlay": "How to play",
+    "DOTA_HudSpectator_Buffering": "Buffering...",
     "DOTA_Hud_AgiTooltip_Armor": "- Every 7 points increase armor by 1",
     "DOTA_Hud_AgiTooltip_AttackSpeed": "- Each point increases attack speed by 1",
     "DOTA_Hud_AttackDamage": "Attack damage: {s:attack_damage}",
