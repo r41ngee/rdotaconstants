@@ -82,3 +82,56 @@ fn parse_heroes() -> &'static serde_json::Map<String, Value> {
         serde_json::from_str(HEROES_JSON).expect("failed to parse heroes.json")
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    #[test]
+    fn get_self() {
+        Hero::get_self("npc_dota_hero_antimage").unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn get_self_fake() {
+        Hero::get_self("sometypeofshit").unwrap();
+    }
+
+    #[test]
+    fn name_getter() {
+        let name = "npc_dota_hero_antimage";
+        let hero = Hero::get_self(name).unwrap();
+        assert_eq!(name, hero.name());
+    }
+
+    #[test]
+    fn data_getter() {
+        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        assert!(!hero.data().is_empty());
+    }
+
+    #[test]
+    fn data_getter_truth() {
+        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        assert_eq!(hero.data().get("CMEnabled").unwrap(), "1");
+    }
+
+    #[test]
+    fn display_name() {
+        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        assert_eq!(hero.display_name(), "Anti-Mage");
+    }
+
+    #[test]
+    fn id() {
+        let hero = Hero::get_self("npc_dota_hero_antimage").unwrap();
+        assert_eq!(hero.id(), 1);
+    }
+
+    #[test]
+    fn get_all() {
+        let heroes = Hero::all();
+        assert!(!heroes.is_empty())
+    }
+}

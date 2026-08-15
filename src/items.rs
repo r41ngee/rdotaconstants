@@ -113,3 +113,42 @@ fn parse_items() -> &'static serde_json::Map<String, Value> {
         filtered
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    #[test]
+    fn get_self() {
+        Item::get_self("item_aeon_disk").unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn get_self_fake() {
+        Item::get_self("item_anjdsdjknasnjska").unwrap();
+    }
+
+    #[test]
+    fn name_getter() {
+        let name = "item_aeon_disk";
+        let item = Item::get_self(name).unwrap();
+        assert_eq!(name, item.name())
+    }
+
+    #[test]
+    fn data_getter() {
+        assert!(!Item::get_self("item_aeon_disk").unwrap().data().is_empty());
+    }
+
+    #[test]
+    fn get_cost() {
+        let item = Item::get_self("item_aeon_disk").unwrap();
+        assert_eq!(item.get_cost().unwrap(), 3000);
+    }
+
+    #[test]
+    fn get_all() {
+        assert!(!Item::all().is_empty())
+    }
+}

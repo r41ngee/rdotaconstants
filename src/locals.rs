@@ -15,3 +15,15 @@ pub fn locals() -> &'static HashMap<String, String> {
             .collect()
     })
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn get_locals() {
+        use crate::*;
+
+        let q = "AbilityDamage";
+        let v = "DAMAGE:";
+        assert_eq!(locals().get(q).unwrap(), v);
+    }
+}
