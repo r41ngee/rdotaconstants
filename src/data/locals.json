@@ -2430,6 +2430,8 @@
     "DOTA_Armory_Filter_Tradeable": "TRADEABLE",
     "DOTA_Armory_Filter_WillExpire": "WILL EXPIRE",
     "DOTA_Armory_ImportToCollection": "Add All Items to My Collection",
+    "DOTA_Armory_InventoryCapacityLimit": "Your inventory is at <b>{d:backpack_filled_percent}%</b> capacity",
+    "DOTA_Armory_InventoryCapacityLimit_Tooltip": "When you're over capacity, you won't be able to obtain Dota items through Steam community features like the Market or Trading. You will still be able to purchase and earn items in Dota.",
     "DOTA_Armory_ItemLevel": "Level {d:ItemQuantity}",
     "DOTA_Armory_ItemQuantity": "x{d:ItemQuantity}",
     "DOTA_Armory_RepackageFailure_Bundle_NoRepackage": "The bundle for this item cannot be re-bundled.",
