@@ -41,6 +41,17 @@ impl Hero {
     pub fn id(&self) -> i64 {
         self.id
     }
+
+    /// Get hero object from its id.
+    /// # Example
+    /// ```
+    /// use rdotaconstants::{Hero, Entity};
+    /// let hero = Hero::from_id(1).unwrap();
+    /// assert_eq!(hero.name(), "npc_dota_hero_antimage")
+    /// ```
+    pub fn from_id(id: i64) -> Option<Self> {
+        Self::all().into_iter().find(|x| x.id() == id)
+    }
 }
 
 impl Entity for Hero {
