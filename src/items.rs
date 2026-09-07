@@ -1,7 +1,6 @@
 use serde_json::Value;
 
 use crate::Entity;
-#[cfg(feature = "unstable")]
 use crate::locals;
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
