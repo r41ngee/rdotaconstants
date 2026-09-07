@@ -39,7 +39,9 @@ impl Item {
 
     /// Returns display name of item.
     pub fn display_name(&self) -> Option<&str> {
-        locals().get(&format!("DOTA_Tooltip_ability_{}", self.name())).map(|x| x.as_str())
+        locals().get(&format!("DOTA_Tooltip_ability_{}", self.name()))
+            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
+            .map(|x| x.as_str())
     }
 
     // -----------------------------------------------------------------------------------------
