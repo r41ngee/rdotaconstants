@@ -8,23 +8,23 @@ All game data is embedded directly in the binary at compile time via `include_st
 
 ```rust
 use rdotaconstants::{Hero, Ability, Item, locals};
+use rdotaconstants::Entity;
 
 // Heroes
-let hero = Hero::get("npc_dota_hero_axe").unwrap();
-assert_eq!(hero.id, 2);
+let hero = Hero::new("npc_dota_hero_axe").unwrap();
+assert_eq!(hero.id(), 2);
 assert_eq!(hero.display_name(), "Axe");
 
-let hero = Hero::get_by_id(1).unwrap();           // Anti-Mage
-let hero = Hero::get_by_display_name("Axe").unwrap();
+let hero = Hero::from_id(1).unwrap(); // Anti-Mage
 
 // Abilities
-let ability = Ability::get("antimage_mana_break").unwrap();
-assert_eq!(ability.display_name(), "Mana Break");
-assert!(!ability.display_description().is_empty());
+let ability = Ability::new("antimage_mana_break").unwrap();
+assert_eq!(ability.display_name().unwrap(), "Mana Break");
+assert!(!ability.display_description().unwrap().is_empty());
 
 // Items
-let item = Item::get("item_blink").unwrap();
-assert_eq!(item.display_name(), "Blink Dagger");
+let item = Item::new("item_blink").unwrap();
+assert_eq!(item.display_name().unwrap(), "Blink Dagger");
 
 // All entries
 Hero::all();       // 128+ heroes
@@ -56,7 +56,7 @@ Each struct also exposes a raw `data: serde_json::Map<String, Value>` field with
 
 ## Project Structure
 
-```
+```text
 src/
   lib.rs              # Crate root, re-exports, locals(), tests
   heroes.rs           # Hero struct and lookup methods
