@@ -69,14 +69,6 @@ src/
     locals.json       # ~57,800 localization entries
 ```
 
-## Testing
-
-```bash
-cargo test
-```
-
-12 unit tests covering all entity types and lookup methods.
-
 ## CI/CD
 
 GitHub Actions automatically:
