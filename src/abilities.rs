@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::Entity;
+use crate::{Entity, locals};
 
 pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
 
@@ -11,6 +11,22 @@ pub struct Ability {
     name: String,
     /// Ability data as [`serde_json::Map`]
     data: serde_json::Map<String, Value>,
+}
+
+impl Ability {
+    /// Returns display name of ability.
+    pub fn display_name(&self) -> Option<&str> {
+        locals().get(&format!("DOTA_Tooltip_ability_{}", self.name()))
+            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
+            .map(|x| x.as_str())
+    }
+
+    /// Returns description of ability.
+    pub fn display_description(&self) -> Option<&str> {
+        locals().get(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
+            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}_Description", self.name())))
+            .map(|x| x.as_str())
+    }    
 }
 
 impl Entity for Ability {

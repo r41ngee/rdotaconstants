@@ -1,6 +1,4 @@
-/*!
- * rdotaconstants - library created to work with Dota constant values
- */
+#![doc = include_str!("../README.md")]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![deny(clippy::unwrap_used)]
 #![deny(clippy::expect_used)]

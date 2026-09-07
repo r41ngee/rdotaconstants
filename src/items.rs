@@ -1,7 +1,6 @@
 use serde_json::Value;
 
 use crate::Entity;
-#[cfg(feature = "unstable")]
 use crate::locals;
 
 pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
@@ -36,6 +35,13 @@ impl Item {
         } else {
             None
         }
+    }
+
+    /// Returns display name of item.
+    pub fn display_name(&self) -> Option<&str> {
+        locals().get(&format!("DOTA_Tooltip_ability_{}", self.name()))
+            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
+            .map(|x| x.as_str())
     }
 
     // -----------------------------------------------------------------------------------------
