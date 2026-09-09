@@ -9067,6 +9067,8 @@
     "DOTA_Custom_Game_Current_Player_Count": "{d:current_player_count} playing now",
     "DOTA_Custom_Game_Dedicated_Servers": "Dedicated Servers",
     "DOTA_Custom_Game_Dedicated_Servers_I": "This custom game has dedicated server support. Games played will be hosted by Valve on dedicated servers.",
+    "DOTA_Custom_Game_Dedicated_Servers_Unavailable": "Player-Hosted",
+    "DOTA_Custom_Game_Dedicated_Servers_Unavailable_I": "Dedicated servers are currently fully allocated for other matches. This match will be hosted by one of the players.",
     "DOTA_Custom_Game_Description": "{g:dota_filtered_string:game_description}",
     "DOTA_Custom_Game_DetailsPrompt": "Visit this game's detail page to learn more, install, and play.",
     "DOTA_Custom_Game_Download_Queued": "Download Queued",
