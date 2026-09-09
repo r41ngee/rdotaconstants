@@ -1,5 +1,15 @@
 # rdotaconstants
 
+![Crates.io Version](https://img.shields.io/crates/v/rdotaconstants)
+
+
+![docs.rs](https://img.shields.io/docsrs/rdotaconstants)
+![Deps.rs Crate Dependencies (latest)](https://img.shields.io/deps-rs/rdotaconstants/latest)
+![GitHub last commit](https://img.shields.io/github/last-commit/r41ngee/rdotaconstants)
+![Crates.io License](https://img.shields.io/crates/l/rdotaconstants)
+
+
+
 Rust port of [pydotaconstants](https://github.com/r41ngee/pydotaconstants) — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies.
 
 All game data is embedded directly in the binary at compile time via `include_str!`. No file I/O, no network calls.
