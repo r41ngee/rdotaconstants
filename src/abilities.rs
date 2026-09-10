@@ -2,7 +2,7 @@ use serde_json::Value;
 
 use crate::{Entity, locals};
 
-pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
+pub(crate) static ABILITIES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/abilities.json"));
 
 #[derive(Debug, Clone)]
 /// Represents ability data

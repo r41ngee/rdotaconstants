@@ -2,7 +2,7 @@ use serde_json::Value;
 
 use crate::{Entity, locals};
 
-pub(crate) static HEROES_JSON: &str = include_str!("data/heroes.json");
+pub(crate) static HEROES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/heroes.json"));
 
 /// Represents hero's data
 #[derive(Debug, Clone)]

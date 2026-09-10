@@ -3,7 +3,7 @@ use serde_json::Value;
 use crate::Entity;
 use crate::locals;
 
-pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
+pub(crate) static ITEMS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/items.json"));
 
 /// Struct that represents an Item object
 #[derive(Debug, Clone)]
