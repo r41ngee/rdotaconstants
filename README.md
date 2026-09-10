@@ -45,19 +45,6 @@ Item::all();       // 544+ items
 locals().get("npc_dota_hero_axe:n"); // Some("Axe")
 ```
 
-## API Reference
-
-| Method | Hero | Ability | Item |
-|---|---|---|---|
-| `get(name)` | by codename | by codename | by codename |
-| `get_by_id(id)` | by HeroID (i64) | — | — |
-| `get_by_display_name(name)` | by display name | by display name | by display name |
-| `all()` | all heroes | all abilities | all items |
-| `display_name()` | localized name | localized name | localized name |
-| `display_description()` | — | localized description | — |
-
-Each struct also exposes a raw `data: serde_json::Map<String, Value>` field with full access to every Valve-defined field (cooldowns, mana costs, damage types, behavior flags, etc.).
-
 ## How It Works
 
 - All JSON data is compiled into the binary via `include_str!`
