@@ -24,7 +24,7 @@ impl Item {
     /// 
     /// # Example
     /// ```
-    /// use rdotaconstants::{Item, Entity};
+    /// # use rdotaconstants::{Item, Entity};
     /// let item = Item::new("item_blink").unwrap();
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
@@ -55,6 +55,12 @@ impl Item {
     /// There is no known examples of
     /// this behavior, but this function
     /// is still unsafe for future.
+    /// 
+    /// ```
+    /// # use rdotaconstants::{Entity, Item};
+    /// let item = Item::get_by_display_name("Aeon Disk");
+    /// assert_eq!(item.name(), "item_aeon_disk")
+    /// ```
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();
