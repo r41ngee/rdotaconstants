@@ -157,4 +157,17 @@ mod tests {
     fn get_all() {
         assert!(!Item::all().is_empty())
     }
+
+    #[test]
+    fn get_display_name() {
+        let item = Item::new("item_aeon_disk").unwrap();
+        assert_eq!(item.display_name().unwrap(), "Aeon Disk")
+    }
+
+    #[cfg(feature = "unstable")]
+    #[test]
+    fn get_by_display_name() {
+        let item = Item::get_by_display_name("Aeon Disk").unwrap();
+        assert_eq!(item.name(), "item_aeon_disk")
+    }
 }
