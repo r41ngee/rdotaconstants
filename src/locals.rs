@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-static LOCALS_JSON: &str = include_str!("data/locals.json");
+static LOCALS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/locals.json"));
 
 /// Function that returns a [HashMap]<[String], [String]> with all localization strings for English language.
 #[allow(clippy::expect_used)]

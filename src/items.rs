@@ -3,7 +3,7 @@ use serde_json::Value;
 use crate::Entity;
 use crate::locals;
 
-pub(crate) static ITEMS_JSON: &str = include_str!("data/items.json");
+pub(crate) static ITEMS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/items.json"));
 
 /// Struct that represents an Item object
 #[derive(Debug, Clone)]
@@ -24,7 +24,7 @@ impl Item {
     /// 
     /// # Example
     /// ```
-    /// use rdotaconstants::{Item, Entity};
+    /// # use rdotaconstants::{Item, Entity};
     /// let item = Item::new("item_blink").unwrap();
     /// assert_eq!(item.get_cost().unwrap(), 2250);
     /// ```
@@ -55,6 +55,12 @@ impl Item {
     /// There is no known examples of
     /// this behavior, but this function
     /// is still unsafe for future.
+    /// 
+    /// ```
+    /// # use rdotaconstants::{Entity, Item};
+    /// let item = Item::get_by_display_name("Aeon Disk");
+    /// assert_eq!(item.name(), "item_aeon_disk")
+    /// ```
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
         let locs = locals();
@@ -156,5 +162,18 @@ mod tests {
     #[test]
     fn get_all() {
         assert!(!Item::all().is_empty())
+    }
+
+    #[test]
+    fn get_display_name() {
+        let item = Item::new("item_aeon_disk").unwrap();
+        assert_eq!(item.display_name().unwrap(), "Aeon Disk")
+    }
+
+    #[cfg(feature = "unstable")]
+    #[test]
+    fn get_by_display_name() {
+        let item = Item::get_by_display_name("Aeon Disk").unwrap();
+        assert_eq!(item.name(), "item_aeon_disk")
     }
 }

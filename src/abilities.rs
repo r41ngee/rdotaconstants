@@ -2,7 +2,7 @@ use serde_json::Value;
 
 use crate::{Entity, locals};
 
-pub(crate) static ABILITIES_JSON: &str = include_str!("data/abilities.json");
+pub(crate) static ABILITIES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/abilities.json"));
 
 #[derive(Debug, Clone)]
 /// Represents ability data
@@ -138,5 +138,18 @@ mod tests {
         );
 
         assert_eq!(ability.get("missing"), None);
+    }
+
+    #[test]
+    fn get_display_name() {
+        let ability = Ability::new("nevermore_requiem").unwrap();
+        assert_eq!(ability.display_name().unwrap(), "Requiem of Souls");
+    }
+
+    #[test]
+    fn get_display_description() {
+        let ability = Ability::new("nevermore_requiem").unwrap();
+        let desc = "Shadow Fiend gathers up to %max_soul_release% of his captured souls to release them as lines of demonic energy. Units near Shadow Fiend when the souls are released can be damaged by several lines of energy. Any unit damaged by Requiem of Souls will be feared and have its movement speed and magic resistance reduced for %requiem_slow_duration% seconds for each line hit up to a maximum of %requiem_slow_duration_max%. Lines of energy are created for every soul captured through Necromastery. <br><br> Requiem of Souls is automatically cast whenever Shadow Fiend dies, regardless of its cooldown.";
+        assert_eq!(ability.display_description().unwrap(), desc);
     }
 }
