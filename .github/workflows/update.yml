@@ -57,23 +57,23 @@ jobs:
             - name: Download JSONs from pydotaconstants
               run: |
                     set -euo pipefail
-                    mkdir -p src/data/
+                    mkdir -p data/
 
                     BASE="https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/src/pydotaconstants/data/"
 
-                    curl -sL -o src/data/abilities.json "$BASE/abilities.json"
-                    curl -sL -o src/data/heroes.json "$BASE/heroes.json"
-                    curl -sL -o src/data/items.json "$BASE/items.json"
-                    curl -sL -o src/data/locals.json "$BASE/locals.json"
+                    curl -sL -o data/abilities.json "$BASE/abilities.json"
+                    curl -sL -o data/heroes.json "$BASE/heroes.json"
+                    curl -sL -o data/items.json "$BASE/items.json"
+                    curl -sL -o data/locals.json "$BASE/locals.json"
 
             - uses: actions-rust-lang/setup-rust-toolchain@v1
             - run: cargo t
             - name: Check data size
               run: |
                     set -euo pipefail
-                    heroes=$(jq 'length' src/data/heroes.json)
-                    items=$(jq 'length' src/data/items.json)
-                    abilities=$(jq 'length' src/data/abilities.json)
+                    heroes=$(jq 'length' data/heroes.json)
+                    items=$(jq 'length' data/items.json)
+                    abilities=$(jq 'length' data/abilities.json)
                     echo "heroes=$heroes items=$items abilities=$abilities"
                     if (( heroes < 120 || items < 500 || abilities < 1000 )); then
                         echo "::error::Build output looks incomplete (heroes=$heroes items=$items abilities=$abilities)"
