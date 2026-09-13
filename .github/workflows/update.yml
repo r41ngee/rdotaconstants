@@ -91,7 +91,7 @@ jobs:
                     echo "$LATEST" > pydotaconstants_commit.sha
                     git pull
 
-                    if git diff --quiet src/data/; then
+                    if git diff --quiet data/; then
                         echo "No constant changes. Advancing pydotaconstants tracker only."
                         git add pydotaconstants_commit.sha
                         if ! git diff --quiet --cached -- pydotaconstants_commit.sha; then
