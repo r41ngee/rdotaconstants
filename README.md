@@ -17,8 +17,7 @@ All game data is embedded directly in the binary at compile time via `include_st
 ## Usage
 
 ```rust
-use rdotaconstants::{Hero, Ability, Item, locals};
-use rdotaconstants::Entity;
+use rdotaconstants::*;
 
 // Heroes
 let hero = Hero::new("npc_dota_hero_axe").unwrap();
@@ -42,7 +41,7 @@ Ability::all();    // 1291+ abilities
 Item::all();       // 544+ items
 
 // Localization
-locals().get("npc_dota_hero_axe:n"); // Some("Axe")
+LOCALS.get("npc_dota_hero_axe:n"); // Some("Axe")
 ```
 
 ## How It Works
