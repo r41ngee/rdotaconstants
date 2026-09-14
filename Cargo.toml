@@ -2,6 +2,7 @@
 name = "rdotaconstants"
 version = "0.4.0"
 rust-version = "1.85.1"
+tags = ["dota2", "constants", "localization", "heroes", "abilities", "items"]
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
 license = "MIT"
