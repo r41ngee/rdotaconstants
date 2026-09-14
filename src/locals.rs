@@ -4,6 +4,8 @@ use std::sync::OnceLock;
 static LOCALS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/locals.json"));
 
 /// Function that returns a [HashMap]<[String], [String]> with all localization strings for English language.
+/// 
+/// Panics if the `locals.json` file cannot be parsed. Expected not to panic, as the file is generated at build time and should always be valid.
 #[allow(clippy::expect_used)]
 pub fn locals() -> &'static HashMap<String, String> {
     static ONCE: OnceLock<HashMap<String, String>> = OnceLock::new();
