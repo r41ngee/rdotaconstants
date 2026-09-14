@@ -16,15 +16,13 @@ pub struct Ability {
 impl Ability {
     /// Returns display name of ability.
     pub fn display_name(&self) -> Option<&str> {
-        LOCALS.get(&format!("DOTA_Tooltip_ability_{}", self.name()))
-            .or_else(|| LOCALS.get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
+        LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}", self.name()))
             .map(|x| x.as_str())
     }
 
     /// Returns description of ability.
     pub fn display_description(&self) -> Option<&str> {
-        LOCALS.get(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
-            .or_else(|| LOCALS.get(&format!("DOTA_Tooltip_Ability_{}_Description", self.name())))
+        LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
             .map(|x| x.as_str())
     }    
 }

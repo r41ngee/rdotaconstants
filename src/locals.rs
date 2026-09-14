@@ -30,6 +30,18 @@ impl Locals {
     pub fn as_vec(&self) -> Vec<(&String, &String)> {
         self.inner.iter().collect()
     }
+
+    /// Returns a reference to the value corresponding to the key, ignoring case.
+    pub fn get_no_case(&self, key: &str) -> Option<&String> {
+        let key_lower = key.to_lowercase();
+        self.inner.iter().find_map(|(k, v)| {
+            if k.to_lowercase() == key_lower {
+                Some(v)
+            } else {
+                None
+            }
+        })
+    }
 }
 
 /// Function that returns a [HashMap]<[String], [String]> with all localization strings for English language.
