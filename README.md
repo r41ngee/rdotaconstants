@@ -59,11 +59,11 @@ src/
   heroes.rs           # Hero struct and lookup methods
   abilities.rs        # Ability struct and lookup methods
   items.rs            # Item struct and lookup methods
-  data/
-    heroes.json       # ~128 hero definitions
-    abilities.json    # ~1291 ability definitions
-    items.json        # ~544 item definitions
-    locals.json       # ~57,800 localization entries
+data/
+  heroes.json       # ~128 hero definitions
+  abilities.json    # ~1291 ability definitions
+  items.json        # ~544 item definitions
+  locals.json       # ~57,800 localization entries
 ```
 
 ## CI/CD
