@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::{Entity, locals};
+use crate::{Entity, LOCALS};
 
 pub(crate) static ABILITIES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/abilities.json"));
 
@@ -16,17 +16,15 @@ pub struct Ability {
 impl Ability {
     /// Returns display name of ability.
     pub fn display_name(&self) -> Option<&str> {
-        locals().get(&format!("DOTA_Tooltip_ability_{}", self.name()))
-            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
+        LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}", self.name()))
             .map(|x| x.as_str())
     }
 
     /// Returns description of ability.
     pub fn display_description(&self) -> Option<&str> {
-        locals().get(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
-            .or_else(|| locals().get(&format!("DOTA_Tooltip_Ability_{}_Description", self.name())))
+        LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
             .map(|x| x.as_str())
-    }    
+    }
 }
 
 impl Entity for Ability {
@@ -59,6 +57,8 @@ impl Entity for Ability {
     }
 }
 impl crate::private::Sealed for Ability {}
+
+mod properties;
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static serde_json::Map<String, Value> {

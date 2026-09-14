@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-use crate::{Entity, locals};
+use crate::{Entity, LOCALS};
 
 pub(crate) static HEROES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/heroes.json"));
 
@@ -25,7 +25,7 @@ impl Hero {
     /// ```
     pub fn display_name(&self) -> String {
         let key = format!("{}:n", self.name);
-        locals()
+        LOCALS
             .get(&key)
             .cloned()
             .unwrap_or_default()

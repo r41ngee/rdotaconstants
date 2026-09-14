@@ -1,6 +1,6 @@
 [package]
 name = "rdotaconstants"
-version = "0.3.12"
+version = "0.4.0"
 rust-version = "1.85.1"
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
@@ -25,5 +25,5 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [build-dependencies]
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1" }
 serde_json = "1"

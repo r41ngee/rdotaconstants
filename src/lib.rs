@@ -13,14 +13,14 @@ pub mod abilities;
 pub mod items;
 /// Contains [`Entity`] trait
 pub mod entity;
-/// Contains [`locals()`] function
+/// Contains [`LOCALS`] static
 pub mod locals;
 
 pub use heroes::Hero;
 pub use abilities::Ability;
 pub use items::Item;
 pub use entity::Entity;
-pub use locals::locals;
+pub use locals::LOCALS;
 
 mod private {
     pub trait Sealed { }
