@@ -24,7 +24,7 @@ impl Ability {
     pub fn display_description(&self) -> Option<&str> {
         LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
             .map(|x| x.as_str())
-    }    
+    }
 }
 
 impl Entity for Ability {
@@ -57,6 +57,8 @@ impl Entity for Ability {
     }
 }
 impl crate::private::Sealed for Ability {}
+
+mod properties;
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static serde_json::Map<String, Value> {
