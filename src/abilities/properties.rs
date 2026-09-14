@@ -19,6 +19,16 @@ impl super::Ability {
     pub fn is_breakable(&self) -> bool {
         self.data.get("IsBreakable").map(|v| v.as_str().unwrap_or("0") == "1").unwrap_or(false)
     }
+
+    /// Returns true if ability is granted by Aghanim's Shard.
+    pub fn is_granted_by_shard(&self) -> bool {
+        self.data.get("IsGrantedByShard").map(|v| v.as_str().unwrap_or("0") == "1").unwrap_or(false)
+    }
+
+    /// Returns true if ability is granted by Aghanim's Scepter.
+    pub fn is_granted_by_scepter(&self) -> bool {
+        self.data.get("IsGrantedByScepter").map(|v| v.as_str().unwrap_or("0") == "1").unwrap_or(false)
+    }
 }
 
 pub enum AbilityType {
