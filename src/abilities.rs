@@ -25,6 +25,14 @@ impl Ability {
         LOCALS.get_no_case(&format!("DOTA_Tooltip_ability_{}_Description", self.name()))
             .map(|x| x.as_str())
     }
+
+    /// Returns slugname of hero owning this ability.
+    pub fn owner(&self) -> Option<&str> {
+        match self.data().get("owner") {
+            Some(Value::String(s)) => Some(s.as_str()),
+            _ => None,
+        }
+    }
 }
 
 impl Entity for Ability {
@@ -138,6 +146,12 @@ mod tests {
         );
 
         assert_eq!(ability.get("missing"), None);
+    }
+
+    #[test]
+    fn get_owner() {
+        let ability = Ability::new("meepo_earthbind").unwrap();
+        assert_eq!(ability.owner().unwrap(), "npc_dota_hero_meepo");
     }
 
     #[test]
