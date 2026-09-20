@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 
 pub type Pair = Vec<(String, Value)>;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Map {
     inner: Pair,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub enum Value {
     String(String),
     Map(Map),
