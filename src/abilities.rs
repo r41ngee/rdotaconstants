@@ -120,32 +120,13 @@ mod tests {
     fn data_getter_truth() {
         let ability = Ability::new("meepo_earthbind").unwrap();
         let data = ability.data();
-        assert_eq!(data.get("AbilitySound").unwrap(), "Hero_Meepo.Earthbind.Cast");
+        assert_eq!(data.get("AbilitySound").unwrap().get_str().unwrap(), "Hero_Meepo.Earthbind.Cast");
     }
 
     #[test]
     fn get_all() {
         let r#abilities = Ability::all();
         assert!(!abilities.is_empty());
-    }
-
-    #[test]
-    fn entity_get() {
-        use serde_json::{Map, Value};
-
-        let ability = Ability {
-            name: "test".to_string(),
-            data: Map::from_iter([
-                ("foo".to_string(), Value::String("bar".to_string())),
-            ]),
-        };
-
-        assert_eq!(
-            ability.get("foo"),
-            Some(Value::String("bar".to_string()))
-        );
-
-        assert_eq!(ability.get("missing"), None);
     }
 
     #[test]

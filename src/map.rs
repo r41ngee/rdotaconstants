@@ -44,6 +44,10 @@ impl Map {
     pub fn get_key_value<Q: AsRef<str>>(&self, q: Q) -> Option<(Q, &Value)> {
         self.get(&q).map(|v| (q, v))
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
 }
 
 impl Value {

@@ -129,7 +129,7 @@ mod tests {
     #[test]
     fn data_getter_truth() {
         let hero = Hero::new("npc_dota_hero_antimage").unwrap();
-        assert_eq!(hero.data().get("CMEnabled").unwrap(), "1");
+        assert_eq!(hero.data().get("CMEnabled").unwrap().get_str().unwrap(), "1");
     }
 
     #[test]
