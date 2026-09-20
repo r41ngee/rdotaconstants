@@ -1,48 +1,84 @@
 # rdotaconstants
 
 ![Crates.io Version](https://img.shields.io/crates/v/rdotaconstants)
-
-
 ![docs.rs](https://img.shields.io/docsrs/rdotaconstants)
 ![Deps.rs Crate Dependencies (latest)](https://img.shields.io/deps-rs/rdotaconstants/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/r41ngee/rdotaconstants)
 ![Crates.io License](https://img.shields.io/crates/l/rdotaconstants)
 
+Rust port of [pydotaconstants](https://github.com/r41ngee/pydotaconstants): local Dota 2 hero, ability, item, and localization data embedded into the binary at build time.
 
+This crate exposes the data as strongly typed lookup objects and keeps runtime access to a cached in-memory map generated from the upstream JSON sources.
 
-Rust port of [pydotaconstants](https://github.com/r41ngee/pydotaconstants) — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies.
+## Features
 
-All game data is embedded directly in the binary at compile time via `include_str!`. No file I/O, no network calls.
+- Hero lookup by codename and numeric ID
+- Ability lookup by codename with display name and description
+- Item lookup by codename with cost and raw data access
+- Full localization table via `LOCALS`
+- No file I/O or network calls at runtime
+- Works with Rust 1.85.1+
 
-## Usage
+## Installation
+
+```toml
+[dependencies]
+rdotaconstants = "0.5.0"
+```
+
+## Quick start
 
 ```rust
-use rdotaconstants::*;
+use rdotaconstants::{Ability, Entity, Hero, Item, LOCALS};
 
 // Heroes
 let hero = Hero::new("npc_dota_hero_axe").unwrap();
+assert_eq!(hero.name(), "npc_dota_hero_axe");
 assert_eq!(hero.id(), 2);
 assert_eq!(hero.display_name(), "Axe");
 
-let hero = Hero::from_id(1).unwrap(); // Anti-Mage
+let anti_mage = Hero::from_id(1).unwrap();
+assert_eq!(anti_mage.name(), "npc_dota_hero_antimage");
 
 // Abilities
 let ability = Ability::new("antimage_mana_break").unwrap();
 assert_eq!(ability.display_name().unwrap(), "Mana Break");
 assert!(!ability.display_description().unwrap().is_empty());
+assert_eq!(ability.owner().unwrap(), "npc_dota_hero_antimage");
 
 // Items
 let item = Item::new("item_blink").unwrap();
 assert_eq!(item.display_name().unwrap(), "Blink Dagger");
+assert_eq!(item.get_cost().unwrap(), 2250);
 
 // All entries
-Hero::all();       // 128+ heroes
-Ability::all();    // 1291+ abilities
-Item::all();       // 544+ items
+let heroes = Hero::all();
+let abilities = Ability::all();
+let items = Item::all();
+assert!(!heroes.is_empty());
+assert!(!abilities.is_empty());
+assert!(!items.is_empty());
 
 // Localization
-LOCALS.get("npc_dota_hero_axe:n"); // Some("Axe")
+assert_eq!(LOCALS.get("npc_dota_hero_axe:n").unwrap(), "Axe");
 ```
+
+## Data model
+
+Each entity implements the `Entity` trait:
+
+```rust
+use rdotaconstants::Entity;
+
+// Common API for all entity types
+// fn name(&self) -> &str
+// fn data(&self) -> &crate::map::Map
+// fn new<S: AsRef<str>>(s: S) -> Option<Self>
+// fn all() -> Vec<Self>
+// fn get<Q: AsRef<str>>(&self, k: Q) -> Option<&crate::map::Value>
+```
+
+This gives access to the raw key-value metadata for each object while keeping the convenient lookup helpers on the concrete types.
 
 ## How It Works
 
