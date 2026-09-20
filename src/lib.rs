@@ -16,6 +16,8 @@ pub mod entity;
 /// Contains [`LOCALS`] static
 pub mod locals;
 
+pub mod map;
+
 pub use heroes::Hero;
 pub use abilities::Ability;
 pub use items::Item;
