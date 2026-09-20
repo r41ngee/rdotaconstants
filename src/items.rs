@@ -1,9 +1,10 @@
-use serde_json::Value;
+use std::sync::LazyLock;
 
 use crate::Entity;
 use crate::LOCALS;
+use crate::map::{Map, Value};
 
-pub(crate) static ITEMS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/items.json"));
+static ITEMS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/items.bin"));
 
 /// Struct that represents an Item object
 #[derive(Debug, Clone)]
@@ -11,7 +12,7 @@ pub struct Item {
     /// Item's slugname
     name: String,
     /// Item's additional data
-    data: serde_json::Map<String, Value>,
+    data: Map,
 }
 
 impl Item {
@@ -83,15 +84,15 @@ impl Entity for Item {
         &self.name
     }
 
-    fn data(&self) -> &serde_json::Map<String, Value> {
+    fn data(&self) -> &Map {
         &self.data
     }
 
     fn new<S: AsRef<str>>(name: S) -> Option<Self> {
         let items = parse_items();
-        let raw = items.get_key_value(name.as_ref())?;
-        if let Value::Object(o) = raw.1 {
-                Some(Self { name: raw.0.clone(), data: o.clone() })
+        let (name, data) = items.get_key_value(name.as_ref())?;
+        if let Value::Map(m) = data {
+            Some(Self { name: name.to_string(), data: m.clone() })
         } else { None }
     }
 
@@ -110,20 +111,14 @@ impl Entity for Item {
 impl crate::private::Sealed for Item {}
 
 #[allow(clippy::expect_used)]
-fn parse_items() -> &'static serde_json::Map<String, Value> {
-    use std::sync::OnceLock;
-    static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
-    ONCE.get_or_init(|| {
-        let raw: serde_json::Map<String, Value> =
-            serde_json::from_str(ITEMS_JSON).expect("failed to parse abilities.json");
-        let mut filtered = serde_json::Map::new();
-        for (k, v) in raw {
-            if v.is_object() {
-                filtered.insert(k, v);
-            }
-        }
-        filtered
-    })
+fn parse_items() -> &'static Map {
+    static ONCE: LazyLock<Map> = LazyLock::new(|| {
+        bincode::decode_from_slice(ITEMS_BIN, bincode::config::standard())
+            .expect("failed to parse abilities.bin")
+            .0
+    });
+
+    &ONCE
 }
 
 #[cfg(test)]

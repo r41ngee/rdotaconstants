@@ -1,8 +1,10 @@
-use serde_json::Value;
+use std::sync::LazyLock;
+
+use crate::map::{Map, Value};
 
 use crate::{Entity, LOCALS};
 
-pub(crate) static HEROES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/heroes.json"));
+static HEROES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/heroes.bin"));
 
 /// Represents hero's data
 #[derive(Debug, Clone)]
@@ -12,7 +14,7 @@ pub struct Hero {
     /// Hero's ID
     id: i64,
     /// Hero's additional data
-    data: serde_json::Map<String, Value>,
+    data: Map,
 }
 
 impl Hero {
@@ -56,13 +58,13 @@ impl Hero {
 
 impl Entity for Hero {
     fn name(&self) -> &str { &self.name }
-    fn data(&self) -> &serde_json::Map<String, Value> {
+    fn data(&self) -> &Map {
         &self.data
     }
     fn new<S: AsRef<str>>(s: S) -> Option<Self> {
         let name = s.as_ref();
         let heroes = parse_heroes();
-        if let Value::Object(o) = heroes.get(name)? {
+        if let Value::Map(o) = heroes.get(name)? {
             Some(Self {
                 name: name.to_string(),
                 data: o.clone(),
@@ -86,12 +88,14 @@ impl Entity for Hero {
 impl crate::private::Sealed for Hero {}
 
 #[allow(clippy::expect_used)]
-fn parse_heroes() -> &'static serde_json::Map<String, Value> {
-    use std::sync::OnceLock;
-    static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
-    ONCE.get_or_init(|| {
-        serde_json::from_str(HEROES_JSON).expect("failed to parse heroes.json")
-    })
+fn parse_heroes() -> &'static Map {
+    static ONCE: LazyLock<Map> = LazyLock::new(|| {
+        bincode::decode_from_slice(HEROES_BIN, bincode::config::standard())
+            .expect("failed to parse heroes.bin")
+            .0
+    });
+
+    &ONCE
 }
 
 #[cfg(test)]

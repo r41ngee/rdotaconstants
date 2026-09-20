@@ -2,7 +2,7 @@ use crate::map::*;
 
 use crate::{Entity, LOCALS};
 
-pub(crate) static ABILITIES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/abilities.json"));
+static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
 
 #[derive(Debug)]
 /// Represents ability data
@@ -74,19 +74,14 @@ impl crate::private::Sealed for Ability {}
 mod properties;
 
 #[allow(clippy::expect_used)]
-fn parse_abilities() -> &'static serde_json::Map<String, Value> {
+fn parse_abilities() -> &'static Map {
     use std::sync::OnceLock;
-    static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
+    static ONCE: OnceLock<Map> = OnceLock::new();
     ONCE.get_or_init(|| {
-        let raw: serde_json::Map<String, Value> =
-            serde_json::from_str(ABILITIES_JSON).expect("failed to parse abilities.json");
-        let mut filtered = serde_json::Map::new();
-        for (k, v) in raw {
-            if v.is_object() {
-                filtered.insert(k, v);
-            }
-        }
-        filtered
+        let raw: Map = bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
+            .expect("failed to parse abilities.bin")
+            .0;
+        raw
     })
 }
 

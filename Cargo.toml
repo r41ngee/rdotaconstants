@@ -23,9 +23,10 @@ default = []
 unstable = []
 
 [dependencies]
+bincode = "2"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
 
 [build-dependencies]
-serde = { version = "1" }
+serde = { version = "1", features = ["derive"] }
+bincode = "2"
 serde_json = "1"
