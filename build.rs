@@ -2,17 +2,16 @@ use std::{fs::{self, File}, path::{Path, PathBuf}};
 
 include!("src/map.rs");
 
-impl Into<Map> for serde_json::Map<String, serde_json::Value> {
-    fn into(self) -> Map {
+impl From<serde_json::Map<String, serde_json::Value>> for Map {
+    fn from(val: serde_json::Map<String, serde_json::Value>) -> Self {
         Map {
-            inner: self.into_iter().map(|(k, v)| (k, v.into()) ).collect()
+            inner: val.into_iter().map(|(k, v)| (k, v.into()) ).collect()
         }
     }
 }
-
-impl Into<Value> for serde_json::Value {
-    fn into(self) -> Value {
-        match self {
+impl From<serde_json::Value> for Value {
+    fn from(val: serde_json::Value) -> Self {
+        match val {
             serde_json::Value::String(s) => Value::String(s),
             serde_json::Value::Object(m) => Value::Map(m.into()),
             _ => panic!(),
