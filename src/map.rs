@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 
 pub type Pair = Vec<(String, Value)>;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Map {
     inner: Pair,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub enum Value {
     String(String),
     Map(Map),
@@ -28,5 +28,9 @@ impl Map {
 
     pub fn values(&self) -> Vec<&Value> {
         self.inner.iter().map(|(_, v)| v).collect()
+    }
+
+    pub fn get_key_value<Q: AsRef<str>>(&self, q: Q) -> Option<(Q, &Value)> {
+        self.get(&q).map(|v| (q, v))
     }
 }
