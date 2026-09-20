@@ -80,41 +80,37 @@ use rdotaconstants::Entity;
 
 This gives access to the raw key-value metadata for each object while keeping the convenient lookup helpers on the concrete types.
 
-## How It Works
+## How it works
 
-- All JSON data is compiled into the binary via `include_str!`
-- On first access, data is parsed once with `serde_json` and cached in a `std::sync::OnceLock`
-- Lookup by codename, numeric ID, or localized display name
+- Upstream JSON is converted into compact binary blobs during the build step.
+- The generated binary data is embedded into the crate via `include_bytes!`.
+- The first access initializes the in-memory cache using `std::sync::LazyLock` / `OnceLock`.
+- All lookups are done in-memory, without reading files or hitting the network at runtime.
 
-## Project Structure
+## Runtime dependencies
 
-```text
-src/
-  lib.rs              # Crate root, re-exports, locals(), tests
-  heroes.rs           # Hero struct and lookup methods
-  abilities.rs        # Ability struct and lookup methods
-  items.rs            # Item struct and lookup methods
-data/
-  heroes.json       # ~128 hero definitions
-  abilities.json    # ~1291 ability definitions
-  items.json        # ~544 item definitions
-  locals.json       # ~57,800 localization entries
+The crate itself depends on:
+
+- `bincode = "2"`
+- `serde = { version = "1", features = ["derive"] }`
+
+This keeps the public API lightweight while avoiding a runtime dependency on external game data files.
+
+## Unstable feature
+
+The crate has an optional `unstable` feature that enables a display-name-based lookup for items:
+
+```rust
+#[cfg(feature = "unstable")]
+{
+    use rdotaconstants::Item;
+    let item = Item::get_by_display_name("Aeon Disk").unwrap();
+    assert_eq!(item.name(), "item_aeon_disk");
+}
 ```
-
-## CI/CD
-
-GitHub Actions automatically:
-1. Checks [pydotaconstants](https://github.com/r41ngee/pydotaconstants) for upstream changes (every 2 hours)
-2. Downloads fresh JSON data
-3. Runs tests and validates data completeness
-4. Bumps patch version and publishes to crates.io
-
-## Dependencies
-
-Only `serde` + `serde_json`. No dev dependencies.
 
 ## License
 
 MIT
 
-**Data source: [dotabuff/d2vpkr](https://github.com/dotabuff/d2vpkr)**
+**Data source:** [dotabuff/d2vpkr](https://github.com/dotabuff/d2vpkr)
