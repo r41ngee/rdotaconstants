@@ -1,4 +1,4 @@
-use serde_json::{Map, Value};
+use crate::map::{Map, Value};
 
 use crate::private::Sealed;
 
@@ -11,7 +11,7 @@ pub trait Entity: Sealed + Sized {
     /// Returns an entity slugname.
     fn name(&self) -> &str;
     /// Returns an entity data.
-    fn data(&self) -> &Map<String, Value>;
+    fn data(&self) -> &Map;
     /// Returns an object of implementing class by its
     /// slugname.
     fn new<S: AsRef<str>>(s: S) -> Option<Self>;
@@ -19,7 +19,7 @@ pub trait Entity: Sealed + Sized {
     /// of this ability.
     fn all() -> Vec<Self>;
     /// Returns data value for this object.
-    fn get<Q: AsRef<str>>(&self, k: Q) -> Option<Value> {
-        self.data().get(k.as_ref()).cloned()
+    fn get<Q: AsRef<str>>(&self, k: Q) -> Option<&Value> {
+        self.data().get(k.as_ref())
     }
 }

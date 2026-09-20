@@ -15,6 +15,8 @@ pub mod items;
 pub mod entity;
 /// Contains [`LOCALS`] static
 pub mod locals;
+/// Contains storaging system of `vdf` files
+pub mod map;
 
 pub use heroes::Hero;
 pub use abilities::Ability;

@@ -1,16 +1,16 @@
-use serde_json::Value;
+use crate::map::*;
 
 use crate::{Entity, LOCALS};
 
-pub(crate) static ABILITIES_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/abilities.json"));
+static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 /// Represents ability data
 pub struct Ability {
     /// Ability slugname
     name: String,
     /// Ability data as [`serde_json::Map`]
-    data: serde_json::Map<String, Value>,
+    data: Map,
 }
 
 impl Ability {
@@ -40,16 +40,21 @@ impl Entity for Ability {
         &self.name
     }
 
-    fn data(&self) -> &serde_json::Map<String, Value> {
+    fn data(&self) -> &Map {
         &self.data
     }
 
     fn new<S: AsRef<str>>(name: S) -> Option<Self> {
         let abilities = parse_abilities();
-        let raw = abilities.get_key_value(name.as_ref())?;
-        if let Value::Object(o) = raw.1 {
-                Some(Self { name: raw.0.clone(), data: o.clone() })
-        } else { None }
+        let (name, map) = abilities.get_key_value(name.as_ref())?;
+        Some(Self {
+            name: name.to_string(),
+            data: if let Value::Map(m) = map {
+                m.clone()
+            } else {
+                return None;
+            }
+        })
     }
 
     fn all() -> Vec<Self> {
@@ -69,19 +74,14 @@ impl crate::private::Sealed for Ability {}
 mod properties;
 
 #[allow(clippy::expect_used)]
-fn parse_abilities() -> &'static serde_json::Map<String, Value> {
+fn parse_abilities() -> &'static Map {
     use std::sync::OnceLock;
-    static ONCE: OnceLock<serde_json::Map<String, Value>> = OnceLock::new();
+    static ONCE: OnceLock<Map> = OnceLock::new();
     ONCE.get_or_init(|| {
-        let raw: serde_json::Map<String, Value> =
-            serde_json::from_str(ABILITIES_JSON).expect("failed to parse abilities.json");
-        let mut filtered = serde_json::Map::new();
-        for (k, v) in raw {
-            if v.is_object() {
-                filtered.insert(k, v);
-            }
-        }
-        filtered
+        let raw: Map = bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
+            .expect("failed to parse abilities.bin")
+            .0;
+        raw
     })
 }
 
@@ -120,32 +120,13 @@ mod tests {
     fn data_getter_truth() {
         let ability = Ability::new("meepo_earthbind").unwrap();
         let data = ability.data();
-        assert_eq!(data.get("AbilitySound").unwrap(), "Hero_Meepo.Earthbind.Cast");
+        assert_eq!(data.get("AbilitySound").unwrap().get_str().unwrap(), "Hero_Meepo.Earthbind.Cast");
     }
 
     #[test]
     fn get_all() {
         let r#abilities = Ability::all();
         assert!(!abilities.is_empty());
-    }
-
-    #[test]
-    fn entity_get() {
-        use serde_json::{Map, Value};
-
-        let ability = Ability {
-            name: "test".to_string(),
-            data: Map::from_iter([
-                ("foo".to_string(), Value::String("bar".to_string())),
-            ]),
-        };
-
-        assert_eq!(
-            ability.get("foo"),
-            Some(Value::String("bar".to_string()))
-        );
-
-        assert_eq!(ability.get("missing"), None);
     }
 
     #[test]

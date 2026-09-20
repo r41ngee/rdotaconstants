@@ -1,7 +1,10 @@
 use std::collections::HashMap;
 use std::sync::{LazyLock};
+use bincode::config::standard as dconfig;
 
-static LOCALS_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/locals.json"));
+use crate::map::Value;
+
+static LOCALS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/locals.bin"));
 
 /// Global static variable that contains all localization strings for English language.
 /// 
@@ -49,11 +52,15 @@ impl Locals {
 /// Panics if the `locals.json` file cannot be parsed. Expected not to panic, as the file is generated at build time and should always be valid.
 #[allow(clippy::expect_used)]
 fn locals() -> HashMap<String, String> {
-    let raw: HashMap<String, serde_json::Value> =
-        serde_json::from_str(LOCALS_JSON).expect("failed to parse locals.json");
-    raw.into_iter()
-        .filter_map(|(k, v)| v.as_str().map(|s| (k, s.to_string())))
-        .collect()
+    let raw: Vec<crate::map::Pair> =
+        bincode::decode_from_slice(LOCALS_BIN, dconfig())
+        .expect("failed to parse locals.json")
+        .0;
+    raw.into_iter().filter_map(|(k, v)| {
+        if let Value::String(s) = v {
+            Some((k, s))
+        } else { None }
+    }).collect()
 }
 
 #[cfg(test)]
