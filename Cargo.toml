@@ -1,6 +1,6 @@
 [package]
 name = "rdotaconstants"
-version = "0.5.1"
+version = "0.5.2"
 rust-version = "1.85.1"
 keywords = ["dota2", "localization", "heroes", "abilities"]
 edition = "2024"

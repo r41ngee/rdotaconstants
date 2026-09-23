@@ -47,6 +47,12 @@ impl Locals {
     }
 }
 
+impl AsRef<HashMap<String, String>> for Locals {
+    fn as_ref(&self) -> &HashMap<String, String> {
+        &self.inner
+    }
+}
+
 /// Function that returns a [HashMap]<[String], [String]> with all localization strings for English language.
 /// 
 /// Panics if the `locals.json` file cannot be parsed. Expected not to panic, as the file is generated at build time and should always be valid.
