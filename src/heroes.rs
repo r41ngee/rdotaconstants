@@ -42,7 +42,7 @@ impl Hero {
     /// ```
     #[deprecated(
         since = "0.5.3",
-        note = "This function will return `u16`. Use [`id_v2()`](`Self::id_v2()`) instead"
+        note = "This function will return `u16` in `0.6.0`. Use [`id_v2()`](`Self::id_v2()`) instead"
     )]
     pub fn id(&self) -> i64 {
         self.id
@@ -68,7 +68,7 @@ impl Hero {
     /// ```
     #[deprecated(
         since = "0.5.3",
-        note = "This function will take `u16`. Use [`from_id_v2()`](`Self::from_id_v2()`) instead"
+        note = "This function will take `u16` in `0.6.0`. Use [`from_id_v2()`](`Self::from_id_v2()`) instead"
     )]
     pub fn from_id(id: i64) -> Option<Self> {
         Self::all().into_iter().find(|x| x.id() == id)
