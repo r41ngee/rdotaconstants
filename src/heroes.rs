@@ -171,7 +171,7 @@ mod tests {
     #[test]
     fn id() {
         let hero = Hero::new("npc_dota_hero_antimage").unwrap();
-        assert_eq!(hero.id(), 1);
+        assert_eq!(hero.id_v2(), 1);
     }
 
     #[test]
