@@ -64,9 +64,8 @@ impl Item {
     /// ```
     #[cfg(feature = "unstable")]
     pub fn get_by_display_name(display_name: &str) -> Option<Item> {
-        let locs = locals();
         let prefix = "DOTA_Tooltip_Ability_";
-        for (key, value) in locs.iter() {
+        for (key, value) in LOCALS.as_ref().iter() {
             if value == display_name {
                 if let Some(codename) = key.strip_prefix(prefix) {
                     if let Some(item) = Self::new(codename) {
