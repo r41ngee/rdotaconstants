@@ -40,8 +40,23 @@ impl Hero {
     /// let hero = Hero::new("npc_dota_hero_antimage").unwrap();
     /// assert_eq!(hero.id(), 1);
     /// ```
+    #[deprecated(
+        since = "0.5.3",
+        note = "This function will return `u16`. Use [`id_v2()`](`Self::id_v2()`) instead"
+    )]
     pub fn id(&self) -> i64 {
         self.id
+    }
+
+    /// Get hero id([`u16`]).
+    /// # Example
+    /// ```
+    /// use rdotaconstants::{Hero, Entity};
+    /// let hero = Hero::new("npc_dota_hero_antimage").unwrap();
+    /// assert_eq!(hero.id(), 1);
+    /// ```
+    pub fn id_v2(&self) -> u16 {
+        self.id as u16
     }
 
     /// Get hero object from its id.
@@ -51,8 +66,23 @@ impl Hero {
     /// let hero = Hero::from_id(1).unwrap();
     /// assert_eq!(hero.name(), "npc_dota_hero_antimage")
     /// ```
+    #[deprecated(
+        since = "0.5.3",
+        note = "This function will take `u16`. Use [`from_id_v2()`](`Self::from_id_v2()`) instead"
+    )]
     pub fn from_id(id: i64) -> Option<Self> {
         Self::all().into_iter().find(|x| x.id() == id)
+    }
+
+    /// Get hero object from its id([`u16`]).
+    /// # Example
+    /// ```
+    /// use rdotaconstants::{Hero, Entity};
+    /// let hero = Hero::from_id(1).unwrap();
+    /// assert_eq!(hero.name(), "npc_dota_hero_antimage")
+    /// ```
+    pub fn from_id_v2(id: u16) -> Option<Self> {
+        Self::all().into_iter().find(|x| x.id_v2() == id)
     }
 }
 
