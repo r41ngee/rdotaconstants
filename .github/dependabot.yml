@@ -21,7 +21,6 @@ updates:
           - "major"
 
     labels:
-      - "rust"
       - "dependencies"
     reviewers:
       - "r41ngee"
