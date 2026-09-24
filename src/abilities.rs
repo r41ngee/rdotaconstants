@@ -1,6 +1,7 @@
 use crate::map::*;
-
 use crate::{Entity, LOCALS};
+
+use bincode_next as bincode;
 
 static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
 

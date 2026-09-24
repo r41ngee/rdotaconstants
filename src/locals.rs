@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 use std::sync::{LazyLock};
+
+use bincode_next as bincode;
 use bincode::config::standard as dconfig;
 
 use crate::map::Value;

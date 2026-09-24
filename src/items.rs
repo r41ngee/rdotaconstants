@@ -4,6 +4,8 @@ use crate::Entity;
 use crate::LOCALS;
 use crate::map::{Map, Value};
 
+use bincode_next as bincode;
+
 static ITEMS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/items.bin"));
 
 /// Struct that represents an Item object
