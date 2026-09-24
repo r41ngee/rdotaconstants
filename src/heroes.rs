@@ -71,7 +71,7 @@ impl Hero {
         note = "This function will take `u16` in `0.6.0`. Use [`from_id_v2()`](`Self::from_id_v2()`) instead"
     )]
     pub fn from_id(id: i64) -> Option<Self> {
-        Self::all().into_iter().find(|x| x.id() == id)
+        Self::all().into_iter().find(|x| x.id_v2() as i64 == id)
     }
 
     /// Get hero object from its id([`u16`]).
