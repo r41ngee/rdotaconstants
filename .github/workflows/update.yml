@@ -139,10 +139,14 @@ jobs:
                         echo "## ✅ No updates needed" >> $GITHUB_STEP_SUMMARY
                         echo "" >> $GITHUB_STEP_SUMMARY
                         echo "d2vpkr is already at \`${{ needs.check.outputs.latest }}\`" >> $GITHUB_STEP_SUMMARY
-                    elif [ "${{ needs.update.result }}" = "success" ]; then
+                    elif [ "${{ needs.update.result }}" = "success" ] && [ "${{ needs.update.outputs.data_change }}" = "true" ]; then
                         echo "## 🔄 Constants updated" >> $GITHUB_STEP_SUMMARY
                         echo "" >> $GITHUB_STEP_SUMMARY
                         echo "Updated from d2vpkr \`${{ needs.check.outputs.latest }}\`" >> $GITHUB_STEP_SUMMARY
+                    elif [ "${{ needs.update.result }}" = "success" ] && [ "${{ needs.update.outputs.data_change }}" = "false" ]; then
+                        echo "## 🧭 Tracker updated only" >> $GITHUB_STEP_SUMMARY
+                        echo "" >> $GITHUB_STEP_SUMMARY
+                        echo "No data changes were detected, but the tracked pydotaconstants commit was advanced to \`${{ needs.check.outputs.latest }}\`." >> $GITHUB_STEP_SUMMARY
                     else
                         echo "## ❌ Update failed" >> $GITHUB_STEP_SUMMARY
                         echo "" >> $GITHUB_STEP_SUMMARY
