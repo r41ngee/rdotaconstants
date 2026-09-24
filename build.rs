@@ -29,10 +29,7 @@ fn main() {
     write_into_bin(include_str!("data/locals.json"), &bin_dir.join("locals.bin"));
     write_into_bin(include_str!("data/items.json"), &bin_dir.join("items.bin"));
 
-    println!("cargo::rerun-if-changed=data/abilities.json");
-    println!("cargo::rerun-if-changed=data/heroes.json");
-    println!("cargo::rerun-if-changed=data/locals.json");
-    println!("cargo::rerun-if-changed=data/items.json");
+    println!("cargo::rerun-if-changed=data/");
 }
 
 fn write_into_bin(from: &str, to: &Path) {
