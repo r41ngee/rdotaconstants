@@ -1,7 +1,8 @@
 use std::sync::LazyLock;
 
-use crate::map::{Map, Value};
+use bincode_next as bincode;
 
+use crate::map::{Map, Value};
 use crate::{Entity, LOCALS};
 
 static HEROES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/heroes.bin"));
@@ -120,7 +121,7 @@ impl crate::private::Sealed for Hero {}
 #[allow(clippy::expect_used)]
 fn parse_heroes() -> &'static Map {
     static ONCE: LazyLock<Map> = LazyLock::new(|| {
-        bincode_next::decode_from_slice(HEROES_BIN, bincode_next::config::standard())
+        bincode::decode_from_slice(HEROES_BIN, bincode::config::standard())
             .expect("failed to parse heroes.bin")
             .0
     });
