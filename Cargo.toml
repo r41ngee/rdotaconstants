@@ -23,7 +23,6 @@ default = []
 unstable = []
 
 [dependencies]
-bincode = "2"
 bincode-next = "2.1.0"
 
 [build-dependencies]

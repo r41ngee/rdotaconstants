@@ -1,4 +1,4 @@
-use bincode::{Decode, Encode};
+use bincode_next::{Decode, Encode};
 
 /// Type alias for key-value pair as in `vdf` files
 pub type Pair = (String, Value);
