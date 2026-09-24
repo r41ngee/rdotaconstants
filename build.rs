@@ -37,5 +37,5 @@ fn write_into_bin(from: &str, to: &Path) {
     let map: Map = map.into();
 
     let mut f = File::create(to).unwrap();
-    bincode::encode_into_std_write(map, &mut f, bincode::config::standard()).unwrap();
+    bincode_next::encode_into_std_write(map, &mut f, bincode_next::config::standard()).unwrap();
 }
