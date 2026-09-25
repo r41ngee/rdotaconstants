@@ -21,9 +21,11 @@ rustdoc-args = ["--cfg", "docsrs"]
 [features]
 default = []
 unstable = []
+serde = ["dep:serde"]
 
 [dependencies]
 bincode-next = "2.1.0"
+serde = { version = "1", optional = true, features = ["derive"] }
 
 [build-dependencies]
 bincode-next = "2.1.0"

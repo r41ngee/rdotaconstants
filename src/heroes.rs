@@ -9,6 +9,7 @@ static HEROES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/heroes
 
 /// Represents hero's data
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Hero {
     /// Hero's slugname
     name: String,
