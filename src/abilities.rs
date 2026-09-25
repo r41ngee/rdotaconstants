@@ -6,6 +6,7 @@ use bincode_next as bincode;
 static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
 
 #[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 /// Represents ability data
 pub struct Ability {
     /// Ability slugname

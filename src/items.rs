@@ -10,6 +10,7 @@ static ITEMS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/items.b
 
 /// Struct that represents an Item object
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Item {
     /// Item's slugname
     name: String,
