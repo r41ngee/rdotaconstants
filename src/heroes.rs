@@ -5,7 +5,7 @@ use bincode_next as bincode;
 use crate::map::{Map, Value};
 use crate::{Entity, LOCALS};
 
-static HEROES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/heroes.bin"));
+static HEROES_BIN: &[u8] = outdir::outdir_bytes!("heroes.bin");
 
 /// Represents hero's data
 #[derive(Debug, Clone)]
