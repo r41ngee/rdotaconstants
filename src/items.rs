@@ -78,6 +78,16 @@ impl Item {
         }
         None
     }
+
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        Some(Self {
+            name: name.to_string(),
+            data: match data {
+                Value::Map(m) => m.clone(),
+                _ => return None,
+            }
+        })
+    }
 }
 
 impl Entity for Item {
@@ -98,15 +108,11 @@ impl Entity for Item {
     }
 
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let items = parse_items();
-        for i in items.keys() {
-            if let Some(item) = Self::new(i) {
-                result.push(item);
-            }
-        }
-
-        result
+        parse_items()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
 impl crate::private::Sealed for Item {}

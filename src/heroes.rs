@@ -85,6 +85,23 @@ impl Hero {
     pub fn from_id_v2(id: u16) -> Option<Self> {
         Self::all().into_iter().find(|x| x.id_v2() == id)
     }
+
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        let data = match data {
+            Value::Map(m) => m,
+            _ => return None,
+        };
+        let id = match data.get("HeroID")?  {
+            Value::String(s) => s.parse().ok()?,
+            _ => return None
+        };
+
+        Some(Self {
+            name: name.to_string(),
+            id,
+            data: data.clone()
+        })
+    }
 }
 
 impl Entity for Hero {
@@ -106,14 +123,11 @@ impl Entity for Hero {
         } else { None }
     }
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let parsed = parse_heroes();
-        for i in parsed.keys() {
-            if let Some(h) = Self::new(i) {
-                result.push(h);
-            }
-        }
-        result
+        parse_heroes()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
 impl crate::private::Sealed for Hero {}
