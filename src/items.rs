@@ -79,6 +79,7 @@ impl Item {
         None
     }
 
+    /// Creates an object from given data.
     fn from_entry(name: &str, data: &Value) -> Option<Self> {
         Some(Self {
             name: name.to_string(),

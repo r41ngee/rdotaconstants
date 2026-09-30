@@ -86,6 +86,7 @@ impl Hero {
         Self::all().into_iter().find(|x| x.id_v2() == id)
     }
 
+    /// Creates an object from given data.
     fn from_entry(name: &str, data: &Value) -> Option<Self> {
         let data = match data {
             Value::Map(m) => m,
