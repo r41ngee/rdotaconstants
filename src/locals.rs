@@ -6,7 +6,7 @@ use bincode::config::standard as dconfig;
 
 use crate::map::Value;
 
-static LOCALS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/locals.bin"));
+static LOCALS_BIN: &[u8] = outdir::outdir_bytes!("locals.bin");
 
 /// Global static variable that contains all localization strings for English language.
 /// 
