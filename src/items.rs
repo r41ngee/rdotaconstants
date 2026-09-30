@@ -9,6 +9,8 @@ use bincode_next as bincode;
 static ITEMS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/items.bin"));
 
 /// Struct that represents an Item object
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Item {
