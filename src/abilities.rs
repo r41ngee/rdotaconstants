@@ -6,7 +6,10 @@ use bincode_next as bincode;
 static ABILITIES_BIN: &[u8] = outdir::outdir_bytes!("abilities.bin");
 
 #[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 /// Represents ability data
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 pub struct Ability {
     /// Ability slugname
     name: String,

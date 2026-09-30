@@ -8,7 +8,10 @@ use crate::{Entity, LOCALS};
 static HEROES_BIN: &[u8] = outdir::outdir_bytes!("heroes.bin");
 
 /// Represents hero's data
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Hero {
     /// Hero's slugname
     name: String,
