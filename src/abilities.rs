@@ -3,7 +3,7 @@ use crate::{Entity, LOCALS};
 
 use bincode_next as bincode;
 
-static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
+static ABILITIES_BIN: &[u8] = outdir::outdir_bytes!("abilities.bin");
 
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
