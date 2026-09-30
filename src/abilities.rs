@@ -37,6 +37,14 @@ impl Ability {
             _ => None,
         }
     }
+
+    /// Creates an object from given data.
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        Some(Self { name: name.to_string(), data: match data {
+            Value::Map(v) => v.clone(),
+            _ => return None,
+        }})
+    }
 }
 
 impl Entity for Ability {
@@ -62,15 +70,11 @@ impl Entity for Ability {
     }
 
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let all_abilities = parse_abilities();
-        for k in all_abilities.keys() {
-            if let Some(ability) = Self::new(k) {
-                result.push(ability);
-            }
-        }
-
-        result
+        parse_abilities()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
 impl crate::private::Sealed for Ability {}
