@@ -23,7 +23,7 @@ This crate exposes the data as strongly typed lookup objects and keeps runtime a
 
 ```toml
 [dependencies]
-rdotaconstants = "0.5.0"
+rdotaconstants = "0.5"
 ```
 
 ## Quick start
