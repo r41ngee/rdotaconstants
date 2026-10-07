@@ -11892,6 +11892,11 @@
             },
             "22": {
                 "SlotIndex": "22",
+                "SlotName": "hero_base",
+                "SlotText": "#LoadoutSlot_Legion_Commander_Base"
+            },
+            "23": {
+                "SlotIndex": "23",
                 "SlotName": "persona_selector",
                 "SlotText": "#LoadoutSlot_Persona_Selector"
             }
