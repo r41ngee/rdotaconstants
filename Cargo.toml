@@ -13,6 +13,7 @@ exclude = [
     "pydotaconstants_commit.sha",
     "local_upd.sh",
 ]
+publish = false
 
 [package.metadata.docs.rs]
 all-features = true
