@@ -24,94 +24,149 @@ jobs:
         env:
             GH_TOKEN: ${{ github.token }}
         outputs:
-            proceed: ${{ steps.check.outputs.proceed }}
-            latest: ${{ steps.check.outputs.latest }}
+            proceed: ${{ steps.compare.outputs.proceed }}
+            latest: ${{ steps.latest.outputs.sha }}
         steps:
             - uses: actions/checkout@v5
-            - name: Check pydotaconstants for new commits
-              id: check
+
+            - name: Get latest pydotaconstants commit
+              id: latest
               run: |
                 set -euo pipefail
-                latest=$(gh api 'repos/r41ngee/pydotaconstants/commits/main' \
-                    | jq -r .sha)
-                current=$(cat pydotaconstants_commit.sha 2>/dev/null || echo "")
+                sha=$(gh api 'repos/r41ngee/pydotaconstants/commits/main' | jq -r .sha)
+                echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-                echo "latest=$latest" >> "$GITHUB_OUTPUT"
-                if [[ "$latest" != "$current" ]]; then
+            - name: Read tracked pydotaconstants commit
+              id: current
+              run: |
+                set -euo pipefail
+                sha=$(cat pydotaconstants_commit.sha 2>/dev/null || true)
+                echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+            - name: Compare commits
+              id: compare
+              env:
+                  LATEST: ${{ steps.latest.outputs.sha }}
+                  CURRENT: ${{ steps.current.outputs.sha }}
+              run: |
+                set -euo pipefail
+                if [[ "$LATEST" != "$CURRENT" ]]; then
                     echo "proceed=true" >> "$GITHUB_OUTPUT"
-                    echo "pydotaconstants changed: $current -> $latest"
+                    echo "pydotaconstants changed: $CURRENT -> $LATEST"
                 else
                     echo "proceed=false" >> "$GITHUB_OUTPUT"
-                    echo "No pydotaconstants changes since $current; nothing to do."
+                    echo "No pydotaconstants changes since $CURRENT; nothing to do."
                 fi
 
     update:
         name: update
         runs-on: ubuntu-latest
         needs: check
-        outputs: 
-            data_change: ${{ steps.update.outputs.data_change }}
+        outputs:
+            data_change: ${{ steps.detect.outputs.data_change }}
         if: needs.check.outputs.proceed == 'true'
         steps:
             - uses: actions/checkout@v5
-            - name: Download JSONs from pydotaconstants
+
+            - name: Download JSON constants
               run: |
-                    set -euo pipefail
-                    mkdir -p data/
+                set -euo pipefail
+                mkdir -p data/
+                BASE="https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/src/pydotaconstants/data/"
 
-                    BASE="https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/src/pydotaconstants/data/"
+                curl --fail --silent --show-error --location -o data/abilities.json "$BASE/abilities.json"
+                curl --fail --silent --show-error --location -o data/heroes.json "$BASE/heroes.json"
+                curl --fail --silent --show-error --location -o data/items.json "$BASE/items.json"
+                curl --fail --silent --show-error --location -o data/locals.json "$BASE/locals.json"
 
-                    curl -sL -o data/abilities.json "$BASE/abilities.json"
-                    curl -sL -o data/heroes.json "$BASE/heroes.json"
-                    curl -sL -o data/items.json "$BASE/items.json"
-                    curl -sL -o data/locals.json "$BASE/locals.json"
+            - name: Set up Rust
+              uses: actions-rust-lang/setup-rust-toolchain@v1
 
-            - uses: actions-rust-lang/setup-rust-toolchain@v1
-            - run: cargo t
-            - name: Check data size
+            - name: Run tests
+              run: cargo t
+
+            - name: Validate downloaded data sizes
               run: |
-                    set -euo pipefail
-                    heroes=$(jq 'length' data/heroes.json)
-                    items=$(jq 'length' data/items.json)
-                    abilities=$(jq 'length' data/abilities.json)
-                    echo "heroes=$heroes items=$items abilities=$abilities"
-                    if (( heroes < 120 || items < 500 || abilities < 1000 )); then
-                        echo "::error::Build output looks incomplete (heroes=$heroes items=$items abilities=$abilities)"
-                        exit 1
-                    fi
-            - name: Commit and push if constants changed
-              id: update
+                set -euo pipefail
+                heroes=$(jq 'length' data/heroes.json)
+                items=$(jq 'length' data/items.json)
+                abilities=$(jq 'length' data/abilities.json)
+                echo "heroes=$heroes items=$items abilities=$abilities"
+                if (( heroes < 120 || items < 500 || abilities < 1000 )); then
+                    echo "::error::Build output looks incomplete (heroes=$heroes items=$items abilities=$abilities)"
+                    exit 1
+                fi
+
+            - name: Configure Git identity
+              run: |
+                git config user.name 'github-actions[bot]'
+                git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+            - name: Update tracker and synchronize branch
               env:
                   LATEST: ${{ needs.check.outputs.latest }}
               run: |
-                    set -euo pipefail
-                    git config user.name  'github-actions[bot]'
-                    git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+                set -euo pipefail
+                echo "$LATEST" > pydotaconstants_commit.sha
+                git pull
 
-                    echo "$LATEST" > pydotaconstants_commit.sha
-                    git pull
+            - name: Detect constants changes
+              id: detect
+              run: |
+                set -euo pipefail
+                if git diff --quiet -- data/; then
+                    echo "data_change=false" >> "$GITHUB_OUTPUT"
+                    echo "No constant changes detected."
+                else
+                    echo "data_change=true" >> "$GITHUB_OUTPUT"
+                    echo "Constants changed."
+                fi
 
-                    if git diff --quiet data/; then
-                        echo "No constant changes. Advancing pydotaconstants tracker only."
-                        git add pydotaconstants_commit.sha
-                        if ! git diff --quiet --cached -- pydotaconstants_commit.sha; then
-                            git commit -m "chore: track pydotaconstants ${LATEST}"
-                            git push
-                        fi
-                        echo "data_change=false" >> "$GITHUB_OUTPUT"
-                    else
-                        echo "Constants changed. Committing update."
-                        cargo install cargo-bump
-                        cargo bump patch
-                        cargo c
-                        git add -A
-                        PATCH=$(curl -sL https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/current_patch.md)
-                        git commit -m "patch(${PATCH}): update constants from pydotaconstants ${LATEST}"
-                        VERSION=$(cargo pkgid | awk -F'[#@]' '{print $NF}')
-                        git tag -a "v$VERSION" -m "$VERSION"
-                        git push
-                        echo "data_change=true" >> "$GITHUB_OUTPUT"
-                    fi
+            - name: Commit tracker only
+              if: steps.detect.outputs.data_change == 'false'
+              env:
+                  LATEST: ${{ needs.check.outputs.latest }}
+              run: |
+                set -euo pipefail
+                echo "No constant changes. Advancing pydotaconstants tracker only."
+                git add pydotaconstants_commit.sha
+                if ! git diff --quiet --cached -- pydotaconstants_commit.sha; then
+                    git commit -m "chore: track pydotaconstants $LATEST"
+                    git push
+                fi
+
+            - name: Install cargo-bump
+              if: steps.detect.outputs.data_change == 'true'
+              run: cargo install cargo-bump
+
+            - name: Bump patch version
+              if: steps.detect.outputs.data_change == 'true'
+              run: cargo bump patch
+
+            - name: Check crate
+              if: steps.detect.outputs.data_change == 'true'
+              run: cargo c
+
+            - name: Get patch metadata
+              if: steps.detect.outputs.data_change == 'true'
+              id: patch
+              run: |
+                set -euo pipefail
+                patch=$(curl --fail --silent --show-error --location 'https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/current_patch.md')
+                echo "value=$patch" >> "$GITHUB_OUTPUT"
+
+            - name: Commit constants and create version tag
+              if: steps.detect.outputs.data_change == 'true'
+              env:
+                  LATEST: ${{ needs.check.outputs.latest }}
+                  PATCH: ${{ steps.patch.outputs.value }}
+              run: |
+                set -euo pipefail
+                git add -A
+                git commit -m "patch($PATCH): update constants from pydotaconstants $LATEST"
+                VERSION=$(cargo pkgid | awk -F'[#@]' '{print $NF}')
+                git tag -a "v$VERSION" -m "$VERSION"
+                git push
 
     publish:
         name: Publish to crates-io
@@ -119,15 +174,16 @@ jobs:
         needs: update
         if: needs.update.outputs.data_change == 'true'
         env:
-            CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN}}
+            CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         steps:
             - uses: actions/checkout@v5
             - uses: actions-rust-lang/setup-rust-toolchain@v1
-            - name: Pull new Cargo.toml
+            - name: Pull updated Cargo.toml
               run: |
                 git fetch
                 git pull
-            - run: cargo publish
+            - name: Publish crate
+              run: cargo publish
 
     report:
         name: Report
@@ -135,23 +191,29 @@ jobs:
         needs: [check, update]
         if: always()
         steps:
-            - name: Summarize
+            - name: Summarize workflow result
+              env:
+                  PROCEED: ${{ needs.check.outputs.proceed }}
+                  LATEST: ${{ needs.check.outputs.latest }}
+                  UPDATE_RESULT: ${{ needs.update.result }}
+                  DATA_CHANGE: ${{ needs.update.outputs.data_change }}
               run: |
-                    if [ "${{ needs.check.outputs.proceed }}" != "true" ]; then
-                        echo "## ✅ No updates needed" >> $GITHUB_STEP_SUMMARY
-                        echo "" >> $GITHUB_STEP_SUMMARY
-                        echo "d2vpkr is already at \`${{ needs.check.outputs.latest }}\`" >> $GITHUB_STEP_SUMMARY
-                    elif [ "${{ needs.update.result }}" = "success" ] && [ "${{ needs.update.outputs.data_change }}" = "true" ]; then
-                        echo "## 🔄 Constants updated" >> $GITHUB_STEP_SUMMARY
-                        echo "" >> $GITHUB_STEP_SUMMARY
-                        echo "Updated from d2vpkr \`${{ needs.check.outputs.latest }}\`" >> $GITHUB_STEP_SUMMARY
-                    elif [ "${{ needs.update.result }}" = "success" ] && [ "${{ needs.update.outputs.data_change }}" = "false" ]; then
-                        echo "## 🧭 Tracker updated only" >> $GITHUB_STEP_SUMMARY
-                        echo "" >> $GITHUB_STEP_SUMMARY
-                        echo "No data changes were detected, but the tracked pydotaconstants commit was advanced to \`${{ needs.check.outputs.latest }}\`." >> $GITHUB_STEP_SUMMARY
-                    else
-                        echo "## ❌ Update failed" >> $GITHUB_STEP_SUMMARY
-                        echo "" >> $GITHUB_STEP_SUMMARY
-                        echo "The update job finished with status: \`${{ needs.update.result }}\`" >> $GITHUB_STEP_SUMMARY
-                        exit 1
-                    fi
+                set -euo pipefail
+                if [[ "$PROCEED" != "true" ]]; then
+                    echo "## ✅ No updates needed" >> "$GITHUB_STEP_SUMMARY"
+                    echo "" >> "$GITHUB_STEP_SUMMARY"
+                    echo "rdotaconstants is already at `$LATEST`" >> "$GITHUB_STEP_SUMMARY"
+                elif [[ "$UPDATE_RESULT" == "success" && "$DATA_CHANGE" == "true" ]]; then
+                    echo "## 🔄 Constants updated" >> "$GITHUB_STEP_SUMMARY"
+                    echo "" >> "$GITHUB_STEP_SUMMARY"
+                    echo "Updated from pydotaconstants `$LATEST`" >> "$GITHUB_STEP_SUMMARY"
+                elif [[ "$UPDATE_RESULT" == "success" && "$DATA_CHANGE" == "false" ]]; then
+                    echo "## 🧭 Tracker updated only" >> "$GITHUB_STEP_SUMMARY"
+                    echo "" >> "$GITHUB_STEP_SUMMARY"
+                    echo "No data changes were detected, but the tracked pydotaconstants commit was advanced to `$LATEST`." >> "$GITHUB_STEP_SUMMARY"
+                else
+                    echo "## ❌ Update failed" >> "$GITHUB_STEP_SUMMARY"
+                    echo "" >> "$GITHUB_STEP_SUMMARY"
+                    echo "The update job finished with status: `$UPDATE_RESULT`" >> "$GITHUB_STEP_SUMMARY"
+                    exit 1
+                fi
