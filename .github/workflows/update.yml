@@ -107,7 +107,7 @@ jobs:
                         git add -A
                         PATCH=$(curl -sL https://raw.githubusercontent.com/r41ngee/pydotaconstants/refs/heads/main/current_patch.md)
                         git commit -m "patch(${PATCH}): update constants from pydotaconstants ${LATEST}"
-                        VERSION=$(cargo pkgid | cut -d'@' -f2)
+                        VERSION=$(cargo pkgid | awk -F'[#@]' '{print $NF}')
                         git tag -a "v$VERSION" -m "$VERSION"
                         git push
                         echo "data_change=true" >> "$GITHUB_OUTPUT"
