@@ -1076,6 +1076,7 @@
         "owner": "npc_dota_hero_antimage"
     },
     "antimage_mana_break": {
+        "AbilityBehavior": "DOTA_ABILITY_BEHAVIOR_PASSIVE",
         "AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
         "SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO",
         "AbilitySound": "Hero_Antimage.ManaBreak",
