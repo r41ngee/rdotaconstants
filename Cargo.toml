@@ -1,7 +1,7 @@
 [package]
 name = "rdotaconstants"
 version = "0.5.10"
-rust-version = "1.85.1"
+rust-version = "1.85.0"
 keywords = ["dota2", "localization", "heroes", "abilities"]
 edition = "2024"
 description = "Rust port of pydotaconstants — local Dota 2 hero, ability, item, and localization data with zero runtime dependencies."
