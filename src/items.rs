@@ -119,7 +119,6 @@ impl Entity for Item {
             .collect()
     }
 }
-impl crate::private::Sealed for Item {}
 
 #[allow(clippy::expect_used)]
 fn parse_items() -> &'static Map {

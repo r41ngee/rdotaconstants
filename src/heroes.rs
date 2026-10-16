@@ -134,7 +134,6 @@ impl Entity for Hero {
             .collect()
     }
 }
-impl crate::private::Sealed for Hero {}
 
 #[allow(clippy::expect_used)]
 fn parse_heroes() -> &'static Map {

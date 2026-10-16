@@ -25,5 +25,8 @@ pub use entity::Entity;
 pub use locals::LOCALS;
 
 mod private {
+    use crate::Entity;
+
     pub trait Sealed { }
+    impl<T: Entity> Sealed for T {}
 }

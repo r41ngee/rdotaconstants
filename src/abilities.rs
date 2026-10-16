@@ -77,7 +77,6 @@ impl Entity for Ability {
             .collect()
     }
 }
-impl crate::private::Sealed for Ability {}
 
 mod properties;
 
