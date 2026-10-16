@@ -14,10 +14,10 @@ pub trait Entity: Sealed + Sized {
     fn data(&self) -> &Map;
     /// Returns an object of implementing class by its
     /// slugname.
-    fn new<S: AsRef<str>>(s: S) -> Option<Self>;
+    fn new<S: AsRef<str>>(s: S) -> Option<&'static Self>;
     /// Returns all possible variants
     /// of this ability.
-    fn all() -> Vec<Self>;
+    fn all() -> Vec<&'static Self>;
     /// Returns data value for this object.
     fn get<Q: AsRef<str>>(&self, k: Q) -> Option<&Value> {
         self.data().get(k.as_ref())
