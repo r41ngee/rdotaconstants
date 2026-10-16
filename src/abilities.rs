@@ -1,3 +1,5 @@
+#![macro_use]
+
 use crate::map::*;
 use crate::{Entity, LOCALS};
 
@@ -39,9 +41,9 @@ impl Ability {
     }
 
     /// Creates an object from given data.
-    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+    fn from_entry(name: String, data: Value) -> Option<Self> {
         Some(Self { name: name.to_string(), data: match data {
-            Value::Map(v) => v.clone(),
+            Value::Map(v) => v,
             _ => return None,
         }})
     }
@@ -56,41 +58,40 @@ impl Entity for Ability {
         &self.data
     }
 
-    fn new<S: AsRef<str>>(name: S) -> Option<Self> {
-        let abilities = parse_abilities();
-        let (name, map) = abilities.get_key_value(name.as_ref())?;
-        Some(Self {
-            name: name.to_string(),
-            data: if let Value::Map(m) = map {
-                m.clone()
-            } else {
-                return None;
-            }
-        })
+    fn new<S: AsRef<str>>(name: S) -> Option<&'static Self> {
+        storage::storage().into_iter().find(|a| a.name == name.as_ref())
     }
 
-    fn all() -> Vec<Self> {
-        parse_abilities()
-            .inner()
-            .iter()
-            .filter_map(|(name, value)| Self::from_entry(name, value))
-            .collect()
+    fn all() -> Vec<&'static Self> {
+        storage::storage().into_iter().collect()
     }
 }
 
 mod properties;
 
-#[allow(clippy::expect_used)]
-fn parse_abilities() -> &'static Map {
-    use std::sync::OnceLock;
-    static ONCE: OnceLock<Map> = OnceLock::new();
-    ONCE.get_or_init(|| {
-        let raw: Map = bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
+mod storage {
+    use super::*;
+
+    #[allow(clippy::expect_used)]
+    fn parse_abilities() -> Map {
+        bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
             .expect("failed to parse abilities.bin")
-            .0;
-        raw
-    })
+            .0
+    }
+
+    pub fn storage() -> &'static Vec<Ability> {
+        use std::sync::LazyLock;
+        static LOCK: LazyLock<Vec<Ability>> = LazyLock::new(|| {
+            let raw = parse_abilities();
+            raw.into_iter()
+                .filter_map(|(name, data)| Ability::from_entry(name, data))
+                .collect()
+        });
+
+        &LOCK
+    }
 }
+
 
 #[cfg(test)]
 mod tests {

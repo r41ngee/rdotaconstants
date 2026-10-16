@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use crate::Entity;
 use crate::LOCALS;
 use crate::map::{Map, Value};
@@ -50,44 +48,12 @@ impl Item {
             .map(|x| x.as_str())
     }
 
-    // -----------------------------------------------------------------------------------------
-    // FUNCTIONS
-    // -----------------------------------------------------------------------------------------
-
-    /// This function is marked as unstable because
-    /// of undefined result for abilities with
-    /// same name.
-    /// 
-    /// There is no known examples of
-    /// this behavior, but this function
-    /// is still unsafe for future.
-    /// 
-    /// ```
-    /// # use rdotaconstants::{Entity, Item};
-    /// let item = Item::get_by_display_name("Aeon Disk");
-    /// assert_eq!(item.name(), "item_aeon_disk")
-    /// ```
-    #[cfg(feature = "unstable")]
-    pub fn get_by_display_name(display_name: &str) -> Option<Item> {
-        let prefix = "DOTA_Tooltip_Ability_";
-        for (key, value) in LOCALS.as_ref().iter() {
-            if value == display_name {
-                if let Some(codename) = key.strip_prefix(prefix) {
-                    if let Some(item) = Self::new(codename) {
-                        return Some(item);
-                    }
-                }
-            }
-        }
-        None
-    }
-
     /// Creates an object from given data.
-    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+    fn from_entry(name: String, data: Value) -> Option<Self> {
         Some(Self {
             name: name.to_string(),
             data: match data {
-                Value::Map(m) => m.clone(),
+                Value::Map(m) => m,
                 _ => return None,
             }
         })
@@ -103,32 +69,40 @@ impl Entity for Item {
         &self.data
     }
 
-    fn new<S: AsRef<str>>(name: S) -> Option<Self> {
-        let items = parse_items();
-        let (name, data) = items.get_key_value(name.as_ref())?;
-        if let Value::Map(m) = data {
-            Some(Self { name: name.to_string(), data: m.clone() })
-        } else { None }
+    fn new<S: AsRef<str>>(name: S) -> Option<&'static Self> {
+        storage::storage()
+            .into_iter()
+            .find(|i| i.name == name.as_ref())
     }
 
-    fn all() -> Vec<Self> {
-        parse_items()
-            .inner()
-            .iter()
-            .filter_map(|(name, value)| Self::from_entry(name, value))
+    fn all() -> Vec<&'static Self> {
+        storage::storage()
+            .into_iter()
             .collect()
     }
 }
 
-#[allow(clippy::expect_used)]
-fn parse_items() -> &'static Map {
-    static ONCE: LazyLock<Map> = LazyLock::new(|| {
+mod storage {
+    use super::*;
+    use std::sync::LazyLock;
+
+    #[allow(clippy::expect_used)]
+    fn parse_items() -> Map {
         bincode::decode_from_slice(ITEMS_BIN, bincode::config::standard())
             .expect("failed to parse abilities.bin")
             .0
-    });
+    }
 
-    &ONCE
+    pub fn storage() -> &'static Vec<Item> {
+        static LOCK: LazyLock<Vec<Item>> = LazyLock::new(|| {
+            let raw = parse_items();
+            raw.into_iter()
+                .filter_map(|(n, d)| Item::from_entry(n, d))
+                .collect()
+        });
+
+        &LOCK
+    }
 }
 
 #[cfg(test)]
