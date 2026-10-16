@@ -1,10 +1,11 @@
-use bincode::{Decode, Encode};
+use bincode_next::{Decode, Encode};
 
 /// Type alias for key-value pair as in `vdf` files
 pub type Pair = (String, Value);
 
 #[derive(Debug, Clone)]
 #[derive(Decode, Encode)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 /// Map of key-value pairs ([`Pair`])
 pub struct Map {
     inner: Vec<Pair>,
@@ -12,6 +13,7 @@ pub struct Map {
 
 #[derive(Debug, Clone)]
 #[derive(Decode, Encode)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 /// Value of [`Pair`].
 /// 
 /// Can be [`String`] or child [`Map`].

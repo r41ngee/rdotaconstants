@@ -1,11 +1,15 @@
 use crate::map::*;
-
 use crate::{Entity, LOCALS};
 
-static ABILITIES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/abilities.bin"));
+use bincode_next as bincode;
+
+static ABILITIES_BIN: &[u8] = outdir::outdir_bytes!("abilities.bin");
 
 #[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 /// Represents ability data
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 pub struct Ability {
     /// Ability slugname
     name: String,
@@ -33,6 +37,14 @@ impl Ability {
             _ => None,
         }
     }
+
+    /// Creates an object from given data.
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        Some(Self { name: name.to_string(), data: match data {
+            Value::Map(v) => v.clone(),
+            _ => return None,
+        }})
+    }
 }
 
 impl Entity for Ability {
@@ -58,18 +70,13 @@ impl Entity for Ability {
     }
 
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let all_abilities = parse_abilities();
-        for k in all_abilities.keys() {
-            if let Some(ability) = Self::new(k) {
-                result.push(ability);
-            }
-        }
-
-        result
+        parse_abilities()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
-impl crate::private::Sealed for Ability {}
 
 mod properties;
 

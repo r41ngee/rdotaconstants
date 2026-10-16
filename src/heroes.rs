@@ -1,13 +1,17 @@
 use std::sync::LazyLock;
 
-use crate::map::{Map, Value};
+use bincode_next as bincode;
 
+use crate::map::{Map, Value};
 use crate::{Entity, LOCALS};
 
-static HEROES_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/heroes.bin"));
+static HEROES_BIN: &[u8] = outdir::outdir_bytes!("heroes.bin");
 
 /// Represents hero's data
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Hero {
     /// Hero's slugname
     name: String,
@@ -84,6 +88,24 @@ impl Hero {
     pub fn from_id_v2(id: u16) -> Option<Self> {
         Self::all().into_iter().find(|x| x.id_v2() == id)
     }
+
+    /// Creates an object from given data.
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        let data = match data {
+            Value::Map(m) => m,
+            _ => return None,
+        };
+        let id = match data.get("HeroID")?  {
+            Value::String(s) => s.parse().ok()?,
+            _ => return None
+        };
+
+        Some(Self {
+            name: name.to_string(),
+            id,
+            data: data.clone()
+        })
+    }
 }
 
 impl Entity for Hero {
@@ -105,17 +127,13 @@ impl Entity for Hero {
         } else { None }
     }
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let parsed = parse_heroes();
-        for i in parsed.keys() {
-            if let Some(h) = Self::new(i) {
-                result.push(h);
-            }
-        }
-        result
+        parse_heroes()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
-impl crate::private::Sealed for Hero {}
 
 #[allow(clippy::expect_used)]
 fn parse_heroes() -> &'static Map {

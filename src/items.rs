@@ -4,10 +4,15 @@ use crate::Entity;
 use crate::LOCALS;
 use crate::map::{Map, Value};
 
-static ITEMS_BIN: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/.bin/items.bin"));
+use bincode_next as bincode;
+
+static ITEMS_BIN: &[u8] = outdir::outdir_bytes!("items.bin");
 
 /// Struct that represents an Item object
+/// 
+/// Implements [`serde::Serialize`] and [`serde::Deserialize`] when using a `serde` option.
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Item {
     /// Item's slugname
     name: String,
@@ -76,6 +81,17 @@ impl Item {
         }
         None
     }
+
+    /// Creates an object from given data.
+    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+        Some(Self {
+            name: name.to_string(),
+            data: match data {
+                Value::Map(m) => m.clone(),
+                _ => return None,
+            }
+        })
+    }
 }
 
 impl Entity for Item {
@@ -96,18 +112,13 @@ impl Entity for Item {
     }
 
     fn all() -> Vec<Self> {
-        let mut result = Vec::new();
-        let items = parse_items();
-        for i in items.keys() {
-            if let Some(item) = Self::new(i) {
-                result.push(item);
-            }
-        }
-
-        result
+        parse_items()
+            .inner()
+            .iter()
+            .filter_map(|(name, value)| Self::from_entry(name, value))
+            .collect()
     }
 }
-impl crate::private::Sealed for Item {}
 
 #[allow(clippy::expect_used)]
 fn parse_items() -> &'static Map {
