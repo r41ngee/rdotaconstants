@@ -1,5 +1,3 @@
-use std::sync::LazyLock;
-
 use bincode_next as bincode;
 
 use crate::map::{Map, Value};
@@ -74,7 +72,7 @@ impl Hero {
         since = "0.5.3",
         note = "This function will take `u16` in `0.6.0`. Use [`from_id_v2()`](`Self::from_id_v2()`) instead"
     )]
-    pub fn from_id(id: i64) -> Option<Self> {
+    pub fn from_id(id: i64) -> Option<&'static Self> {
         Self::all().into_iter().find(|x| x.id_v2() as i64 == id)
     }
 
@@ -85,12 +83,12 @@ impl Hero {
     /// let hero = Hero::from_id(1).unwrap();
     /// assert_eq!(hero.name(), "npc_dota_hero_antimage")
     /// ```
-    pub fn from_id_v2(id: u16) -> Option<Self> {
+    pub fn from_id_v2(id: u16) -> Option<&'static Self> {
         Self::all().into_iter().find(|x| x.id_v2() == id)
     }
 
     /// Creates an object from given data.
-    fn from_entry(name: &str, data: &Value) -> Option<Self> {
+    fn from_entry(name: String, data: Value) -> Option<Self> {
         let data = match data {
             Value::Map(m) => m,
             _ => return None,
@@ -101,9 +99,9 @@ impl Hero {
         };
 
         Some(Self {
-            name: name.to_string(),
+            name,
             id,
-            data: data.clone()
+            data,
         })
     }
 }
@@ -113,37 +111,37 @@ impl Entity for Hero {
     fn data(&self) -> &Map {
         &self.data
     }
-    fn new<S: AsRef<str>>(s: S) -> Option<Self> {
-        let name = s.as_ref();
-        let heroes = parse_heroes();
-        if let Value::Map(o) = heroes.get(name)? {
-            Some(Self {
-                name: name.to_string(),
-                data: o.clone(),
-                id: if let Value::String(ids) = o.get("HeroID")? {
-                    ids.parse().ok()?
-                } else { return None; }
-            })
-        } else { None }
+    fn new<S: AsRef<str>>(name: S) -> Option<&'static Self> {
+        storage::storage().into_iter().find(|h| h.name == name.as_ref())
     }
-    fn all() -> Vec<Self> {
-        parse_heroes()
-            .inner()
-            .iter()
-            .filter_map(|(name, value)| Self::from_entry(name, value))
+    fn all() -> Vec<&'static Self> {
+        storage::storage()
+            .into_iter()
             .collect()
     }
 }
 
-#[allow(clippy::expect_used)]
-fn parse_heroes() -> &'static Map {
-    static ONCE: LazyLock<Map> = LazyLock::new(|| {
-        bincode::decode_from_slice(HEROES_BIN, bincode::config::standard())
-            .expect("failed to parse heroes.bin")
-            .0
-    });
+mod storage {
+    use super::*;
+    use std::sync::LazyLock;
 
-    &ONCE
+    #[allow(clippy::expect_used)]
+    fn parse_heroes() -> Map {
+        bincode::decode_from_slice(HEROES_BIN, bincode::config::standard())
+            .expect("failed to parse abilities.bin")
+            .0
+    }
+
+    pub fn storage() -> &'static Vec<Hero> {
+        static LOCK: LazyLock<Vec<Hero>> = LazyLock::new(|| {
+            let raw = parse_heroes();
+            raw.into_iter()
+                .filter_map(|(n, d)| Hero::from_entry(n, d))
+                .collect()
+        });
+
+        &LOCK
+    }
 }
 
 #[cfg(test)]

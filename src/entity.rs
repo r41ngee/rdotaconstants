@@ -23,3 +23,5 @@ pub trait Entity: Sealed + Sized {
         self.data().get(k.as_ref())
     }
 }
+
+
