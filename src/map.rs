@@ -66,6 +66,26 @@ impl Map {
     }
 }
 
+impl IntoIterator for Map {
+    type Item = Pair;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
+    }
+}
+
+impl Map {
+    /// Transforms map into an iterator of [`Pair`] references.
+    pub fn iter(&self) -> impl Iterator<Item = &Pair> {
+        self.inner.iter()
+    }
+
+    /// Transforms map into an iterator of mutable [`Pair`] references.
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Pair> {
+        self.inner.iter_mut()
+    }
+}
+
 impl Value {
     #[allow(dead_code)]
     pub(crate) fn get_str(&self) -> Option<&str> {
