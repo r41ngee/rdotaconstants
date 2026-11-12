@@ -2,7 +2,7 @@ use crate::map::{Map, Value};
 
 use crate::private::Sealed;
 
-/// Trait that descripts methods
+/// Trait that describes methods
 /// that works for all entities
 /// described in this crate.
 /// 

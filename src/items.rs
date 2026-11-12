@@ -25,7 +25,7 @@ impl Item {
     // METHODS
     // -----------------------------------------------------------------------------------------
 
-    /// Function that used to get a item's price,
+    /// Function that used to get an item's price,
     /// if it has one.
     /// 
     /// # Example
@@ -144,7 +144,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn get_self_fake() {
-        Item::new("item_anjdsdjknasnjska").unwrap();
+        Item::new("item_some_shit").unwrap();
     }
 
     #[test]
