@@ -25,6 +25,11 @@ pub enum Value {
 }
 
 impl Map {
+    #[allow(dead_code)]
+    pub(super) fn new(inner: Vec<Pair>) -> Self {
+        Map { inner }
+    }
+    
     /// Finds a value by key.
     pub fn get(&self, q: impl AsRef<str>) -> Option<&Value> {
         self.inner.iter().find(|x| x.0 == q.as_ref()).map(|(_, v)| v)

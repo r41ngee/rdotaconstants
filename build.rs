@@ -1,13 +1,13 @@
 use std::fs;
 use std::path::{PathBuf};
 
-include!("src/map.rs");
+#[path = "src/map.rs"]
+mod map;
+use map::*;
 
 impl From<serde_json::Map<String, serde_json::Value>> for Map {
     fn from(val: serde_json::Map<String, serde_json::Value>) -> Self {
-        Map {
-            inner: val.into_iter().map(|(k, v)| (k, v.into()) ).collect()
-        }
+        Map::new(val.into_iter().map(|(k, v)| (k, v.into()) ).collect())
     }
 }
 impl From<serde_json::Value> for Value {
