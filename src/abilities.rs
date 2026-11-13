@@ -82,14 +82,13 @@ mod properties;
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static Map {
-    use std::sync::OnceLock;
-    static ONCE: OnceLock<Map> = OnceLock::new();
-    ONCE.get_or_init(|| {
-        let raw: Map = bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
+    use std::sync::LazyLock;
+    static ONCE: LazyLock<Map> = LazyLock::new(|| {
+        bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
             .expect("failed to parse abilities.bin")
-            .0;
-        raw
-    })
+            .0
+    });
+    &ONCE
 }
 
 #[cfg(test)]
