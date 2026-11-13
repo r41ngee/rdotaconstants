@@ -26,7 +26,7 @@ serde = ["dep:serde"]
 [dependencies]
 bincode-next = "2.1.0"
 serde = { version = "1", optional = true, features = ["derive"] }
-outdir = { version = "0.1.0" }
+outdir = { version = "0.1.2" }
 
 [build-dependencies]
 bincode-next = "2.1.0"
