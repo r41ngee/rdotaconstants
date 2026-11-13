@@ -19482,6 +19482,8 @@
     "DOTA_PlayerOriginQuestion_MOBAExplanation": "Select the game you are most comfortable with:",
     "DOTA_PlayerOriginQuestion_Question": "To improve your playing experience,<br>please share your familiarity with Dota 2 and similar games.",
     "DOTA_PlayerOriginQuestion_RTSButton": "I've played RTS games.",
+    "DOTA_PlayerReportPopup_Botting_Title": "Botting",
+    "DOTA_PlayerReportPopup_Botting_Tooltip": "Their hero is being played by automated software instead of a person.",
     "DOTA_PlayerReportPopup_Cheating_Title": "Cheating",
     "DOTA_PlayerReportPopup_Cheating_Tooltip": "Using third party software or exploits to gain an unfair advantage.",
     "DOTA_PlayerReportPopup_DidNotPlayRole_Title": "Role Abuse",
