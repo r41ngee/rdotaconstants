@@ -71,6 +71,7 @@ fn locals() -> HashMap<String, String> {
     }).collect()
 }
 
+#[allow(clippy::unwrap_used)]
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {

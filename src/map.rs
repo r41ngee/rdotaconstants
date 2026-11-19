@@ -25,6 +25,11 @@ pub enum Value {
 }
 
 impl Map {
+    #[allow(dead_code)]
+    pub(super) fn __build_rs_new(inner: Vec<Pair>) -> Self {
+        Map { inner }
+    }
+    
     /// Finds a value by key.
     pub fn get(&self, q: impl AsRef<str>) -> Option<&Value> {
         self.inner.iter().find(|x| x.0 == q.as_ref()).map(|(_, v)| v)
@@ -63,6 +68,26 @@ impl Map {
     /// Returns is map is empty.
     pub fn is_empty(&self) -> bool {
         self.inner.is_empty()
+    }
+}
+
+impl IntoIterator for Map {
+    type Item = Pair;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
+    }
+}
+
+impl Map {
+    /// Transforms map into an iterator of [`Pair`] references.
+    pub fn iter(&self) -> impl Iterator<Item = &Pair> {
+        self.inner.iter()
+    }
+
+    /// Transforms map into an iterator of mutable [`Pair`] references.
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Pair> {
+        self.inner.iter_mut()
     }
 }
 

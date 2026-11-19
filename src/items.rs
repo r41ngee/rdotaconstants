@@ -25,7 +25,7 @@ impl Item {
     // METHODS
     // -----------------------------------------------------------------------------------------
 
-    /// Function that used to get a item's price,
+    /// Function that used to get an item's price,
     /// if it has one.
     /// 
     /// # Example
@@ -64,7 +64,7 @@ impl Item {
     /// 
     /// ```
     /// # use rdotaconstants::{Entity, Item};
-    /// let item = Item::get_by_display_name("Aeon Disk");
+    /// let item = Item::get_by_display_name("Aeon Disk").unwrap();
     /// assert_eq!(item.name(), "item_aeon_disk")
     /// ```
     #[cfg(feature = "unstable")]
@@ -131,6 +131,7 @@ fn parse_items() -> &'static Map {
     &ONCE
 }
 
+#[allow(clippy::unwrap_used)]
 #[cfg(test)]
 #[allow(clippy::unwrap_used)]
 mod tests {
@@ -144,7 +145,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn get_self_fake() {
-        Item::new("item_anjdsdjknasnjska").unwrap();
+        Item::new("item_some_shit").unwrap();
     }
 
     #[test]

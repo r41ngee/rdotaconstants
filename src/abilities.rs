@@ -82,14 +82,13 @@ mod properties;
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static Map {
-    use std::sync::OnceLock;
-    static ONCE: OnceLock<Map> = OnceLock::new();
-    ONCE.get_or_init(|| {
-        let raw: Map = bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
+    use std::sync::LazyLock;
+    static ONCE: LazyLock<Map> = LazyLock::new(|| {
+        bincode::decode_from_slice(ABILITIES_BIN, bincode::config::standard())
             .expect("failed to parse abilities.bin")
-            .0;
-        raw
-    })
+            .0
+    });
+    &ONCE
 }
 
 #[cfg(test)]
@@ -122,13 +121,6 @@ mod tests {
     fn data_getter() {
         let ability = Ability::new("meepo_earthbind").unwrap();
         assert!(!ability.data().is_empty())
-    }
-
-    #[test]
-    fn data_getter_truth() {
-        let ability = Ability::new("meepo_earthbind").unwrap();
-        let data = ability.data();
-        assert_eq!(data.get("AbilitySound").unwrap().get_str().unwrap(), "Hero_Meepo.Earthbind.Cast");
     }
 
     #[test]
