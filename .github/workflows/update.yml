@@ -180,6 +180,8 @@ jobs:
         steps:
             - uses: actions/checkout@v5
             - uses: actions-rust-lang/setup-rust-toolchain@v1
+              with:
+                rustflags: ''
             - name: Pull updated Cargo.toml
               run: |
                 git fetch
