@@ -93,6 +93,7 @@ fn parse_abilities() -> &'static Map {
 }
 
 #[cfg(test)]
+#[allow(clippy::unwrap_used)]
 mod tests {
     use crate::*;
 
