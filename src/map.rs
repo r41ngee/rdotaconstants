@@ -26,7 +26,7 @@ pub enum Value {
 
 impl Map {
     #[allow(dead_code)]
-    pub(super) fn new(inner: Vec<Pair>) -> Self {
+    pub(super) fn __build_rs_new(inner: Vec<Pair>) -> Self {
         Map { inner }
     }
     

@@ -7,7 +7,7 @@ use map::*;
 
 impl From<serde_json::Map<String, serde_json::Value>> for Map {
     fn from(val: serde_json::Map<String, serde_json::Value>) -> Self {
-        Map::new(val.into_iter().map(|(k, v)| (k, v.into()) ).collect())
+        Map::__build_rs_new(val.into_iter().map(|(k, v)| (k, v.into()) ).collect())
     }
 }
 impl From<serde_json::Value> for Value {
