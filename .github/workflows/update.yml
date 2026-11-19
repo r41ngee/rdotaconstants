@@ -81,6 +81,8 @@ jobs:
 
             - name: Set up Rust
               uses: actions-rust-lang/setup-rust-toolchain@v1
+              with:
+                rustflags: ''
 
             - name: Run tests
               run: cargo t
