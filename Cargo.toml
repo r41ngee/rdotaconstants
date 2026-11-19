@@ -26,10 +26,10 @@ serde = ["dep:serde"]
 [dependencies]
 bincode-next = "3"
 serde = { version = "1", optional = true, features = ["derive"] }
-outdir = { version = "0.1.2" }
+outdir = { version = "0.1.3" }
 
 [build-dependencies]
 bincode-next = "3"
-outdir = { version = "0.1.2" }
+outdir = { version = "0.1.3" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

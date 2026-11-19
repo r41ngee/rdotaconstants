@@ -38,9 +38,9 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 
 [[package]]
 name = "outdir"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c00fbb24a5ec41f0d8d222387793926f39bd8520079a92ca85c4c3df613664e6"
+checksum = "02e5351bbf8541b07940ae3b38b8a84f66de2d25847be34fdc4f5d2270fe0336"
 
 [[package]]
 name = "pastey"

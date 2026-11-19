@@ -25,10 +25,10 @@ fn main() {
     let bin_dir = out_dir.join(".bin");
     fs::create_dir_all(&bin_dir).unwrap();
 
-    outdir::write!("abilities.bin", &content(include_str!("data/abilities.json"))).unwrap();
-    outdir::write!("heroes.bin", &content(include_str!("data/heroes.json"))).unwrap();
-    outdir::write!("items.bin", &content(include_str!("data/items.json"))).unwrap();
-    outdir::write!("locals.bin", &content(include_str!("data/locals.json"))).unwrap();
+    outdir::write!("abilities.bin", &content(include_str!("data/abilities.json")));
+    outdir::write!("heroes.bin", &content(include_str!("data/heroes.json")));
+    outdir::write!("items.bin", &content(include_str!("data/items.json")));
+    outdir::write!("locals.bin", &content(include_str!("data/locals.json")));
 
     println!("cargo::rerun-if-changed=data/");
 }
