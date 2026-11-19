@@ -64,7 +64,7 @@ impl Item {
     /// 
     /// ```
     /// # use rdotaconstants::{Entity, Item};
-    /// let item = Item::get_by_display_name("Aeon Disk");
+    /// let item = Item::get_by_display_name("Aeon Disk").unwrap();
     /// assert_eq!(item.name(), "item_aeon_disk")
     /// ```
     #[cfg(feature = "unstable")]
