@@ -21,10 +21,6 @@ pub struct Item {
 }
 
 impl Item {
-    // -----------------------------------------------------------------------------------------
-    // METHODS
-    // -----------------------------------------------------------------------------------------
-
     /// Function that used to get an item's price,
     /// if it has one.
     /// 
@@ -49,10 +45,6 @@ impl Item {
             .or_else(|| LOCALS.get(&format!("DOTA_Tooltip_Ability_{}", self.name())))
             .map(|x| x.as_str())
     }
-
-    // -----------------------------------------------------------------------------------------
-    // FUNCTIONS
-    // -----------------------------------------------------------------------------------------
 
     /// This function is marked as unstable because
     /// of undefined result for abilities with
