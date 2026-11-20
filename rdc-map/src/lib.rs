@@ -91,9 +91,8 @@ impl Map {
     }
 }
 
-impl Value {
-    #[allow(dead_code)]
-    pub(crate) fn get_str(&self) -> Option<&str> {
+impl Value {    
+    pub fn get_str(&self) -> Option<&str> {
         if let Self::String(s) = self {
             Some(s.as_str())
         } else { None }

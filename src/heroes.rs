@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use bincode_next as bincode;
 
-use crate::map::{Map, Value};
+use rdc_map::{Map, Value};
 use crate::{Entity, LOCALS};
 
 static HEROES_BIN: &[u8] = outdir::outdir_bytes!("heroes.bin");

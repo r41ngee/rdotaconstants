@@ -1,4 +1,4 @@
-use crate::map::{Map, Value};
+use rdc_map::{Map, Value};
 
 use crate::private::Sealed;
 

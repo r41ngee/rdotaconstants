@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use crate::Entity;
 use crate::LOCALS;
-use crate::map::{Map, Value};
+use rdc_map::{Map, Value};
 
 use bincode_next as bincode;
 

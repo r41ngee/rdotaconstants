@@ -4,7 +4,7 @@ use std::sync::{LazyLock};
 use bincode_next as bincode;
 use bincode::config::standard as dconfig;
 
-use crate::map::Value;
+use rdc_map::Value;
 
 static LOCALS_BIN: &[u8] = outdir::outdir_bytes!("locals.bin");
 
@@ -60,7 +60,7 @@ impl AsRef<HashMap<String, String>> for Locals {
 /// Panics if the `locals.json` file cannot be parsed. Expected not to panic, as the file is generated at build time and should always be valid.
 #[allow(clippy::expect_used)]
 fn locals() -> HashMap<String, String> {
-    let raw: Vec<crate::map::Pair> =
+    let raw: Vec<rdc_map::Pair> =
         bincode::decode_from_slice(LOCALS_BIN, dconfig())
         .expect("failed to parse locals.json")
         .0;
