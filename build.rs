@@ -1,24 +1,8 @@
 use std::fs;
 use std::path::{PathBuf};
+use rdc_map::*;
 
-#[path = "src/map.rs"]
-mod map;
-use map::*;
 
-impl From<serde_json::Map<String, serde_json::Value>> for Map {
-    fn from(val: serde_json::Map<String, serde_json::Value>) -> Self {
-        Map::__build_rs_new(val.into_iter().map(|(k, v)| (k, v.into()) ).collect())
-    }
-}
-impl From<serde_json::Value> for Value {
-    fn from(val: serde_json::Value) -> Self {
-        match val {
-            serde_json::Value::String(s) => Value::String(s),
-            serde_json::Value::Object(m) => Value::Map(m.into()),
-            _ => panic!(),
-        }
-    }
-}
 
 fn main() {
     let out_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap());

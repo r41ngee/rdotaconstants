@@ -76,11 +76,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "rdc-map"
+version = "0.1.0"
+dependencies = [
+ "bincode-next",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "rdotaconstants"
 version = "0.5.14"
 dependencies = [
  "bincode-next",
  "outdir",
+ "rdc-map",
  "serde",
  "serde_json",
 ]

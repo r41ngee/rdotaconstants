@@ -1,4 +1,4 @@
-use crate::map::*;
+use rdc_map::*;
 use crate::{Entity, LOCALS};
 
 use bincode_next as bincode;

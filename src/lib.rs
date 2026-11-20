@@ -15,8 +15,15 @@ pub mod items;
 pub mod entity;
 /// Contains [`LOCALS`] static
 pub mod locals;
-/// Contains storaging system of `vdf` files
-pub mod map;
+
+/// KV related types
+///
+/// As [`Map`](map::Map), [`Value`](map::Value) and [`Pair`](map::Pair) types and their logic was
+/// moved into the separate [`rdc_map`] crate, to not break compatibility this is module with public
+/// usage of these types.
+pub mod map {
+    pub use rdc_map::*;
+}
 
 pub use heroes::Hero;
 pub use abilities::Ability;
