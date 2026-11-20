@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::{PathBuf};
 
+#[allow(dead_code)]
 #[path = "src/map.rs"]
 mod map;
 use map::*;
