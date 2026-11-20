@@ -3,6 +3,8 @@ use crate::{Entity, LOCALS};
 
 use bincode_next as bincode;
 
+pub mod properties;
+
 static ABILITIES_BIN: &[u8] = outdir::outdir_bytes!("abilities.bin");
 
 #[derive(Debug)]
@@ -77,8 +79,6 @@ impl Entity for Ability {
             .collect()
     }
 }
-
-mod properties;
 
 #[allow(clippy::expect_used)]
 fn parse_abilities() -> &'static Map {
