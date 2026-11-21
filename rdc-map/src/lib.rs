@@ -60,11 +60,6 @@ impl Map {
         self.inner.iter().map(|(_, v)| v).collect()
     }
 
-    /// Like [`get()`](Self::get()), but returns tuple with queried key.
-    pub fn get_key_value<Q: AsRef<str>>(&self, q: Q) -> Option<(Q, &Value)> {
-        self.get(&q).map(|v| (q, v))
-    }
-
     /// Returns is map is empty.
     pub fn is_empty(&self) -> bool {
         self.inner.is_empty()
