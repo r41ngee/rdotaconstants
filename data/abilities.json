@@ -15,7 +15,7 @@
         "AbilityManaCost": "110 120 130 140",
         "AbilityValues": {
             "AbilityCooldown": {
-                "value": "12 10 8 6"
+                "value": "13 11 9 7"
             },
             "duration": {
                 "value": "12.0"
@@ -154,7 +154,7 @@
             "curse_self_attack_speed_multiplier_tooltip_only": "1.5",
             "curse_dps": {
                 "value": "12 20 28 36",
-                "special_bonus_unique_abaddon_5": "+25"
+                "special_bonus_unique_abaddon_5": "+20"
             },
             "tower_dps_penalty_pct": "100",
             "curse_interval": "0.5"
@@ -172,7 +172,7 @@
                 "special_bonus_unique_abaddon_6": "+10"
             },
             "max_heal_reduction_pct": {
-                "value": "40.0",
+                "value": "35.0",
                 "hero_levelup": "+1.0",
                 "special_bonus_unique_abaddon_6": "+10"
             },
@@ -2451,7 +2451,7 @@
         "AbilityCooldown": "60",
         "AbilityManaCost": "100",
         "AbilityValues": {
-            "thunderhide_base_max_health": "2200",
+            "thunderhide_base_max_health": "2100",
             "thunderhide_base_damage": "90",
             "thunderhide_total_damage_tooltip": {
                 "value": "90",
@@ -2464,7 +2464,8 @@
             },
             "thunderhide_base_xp_bounty": "124",
             "thunderhide_base_movespeed": "355",
-            "thunderhide_slam_spawn_cooldown": "5"
+            "thunderhide_slam_spawn_cooldown": "5",
+            "thunderhide_slam_duration": "2"
         },
         "AbilityCastAnimation": "ACT_DOTA_CAST_ABILITY_2",
         "owner": "npc_dota_hero_beastmaster"
@@ -3474,8 +3475,8 @@
                 "value": "80 160 240 320",
                 "special_bonus_unique_brewmaster_thunder_clap_damage": "+160"
             },
-            "movement_slow": "15 30 45 60",
-            "attack_speed_slow": "15 30 45 60",
+            "movement_slow": "20 30 40 50",
+            "attack_speed_slow": "20 30 40 50",
             "duration": {
                 "value": "3.5 3.75 4.0 4.25"
             }
@@ -3551,7 +3552,7 @@
             "back_angle": "70",
             "quill_release_threshold": {
                 "value": "275 250 225 200",
-                "special_bonus_unique_bristleback": "-30"
+                "special_bonus_unique_bristleback": "-35"
             },
             "quill_release_interval": ".1",
             "goo_radius": {
@@ -3842,7 +3843,7 @@
         "AbilityCastRange": "900",
         "AbilityCastPoint": "0.2 0.2 0.2 0.2",
         "AbilityCooldown": "9 8 7",
-        "AbilityManaCost": "100",
+        "AbilityManaCost": "100 125 150",
         "AbilityModifierSupportValue": "0.0",
         "AbilityValues": {
             "buff_duration": "20",
@@ -4182,7 +4183,7 @@
             "damage_reduction": "0",
             "AbilityCooldown": {
                 "value": "100 95 90",
-                "special_bonus_unique_centaur_5": "-25"
+                "special_bonus_unique_centaur_5": "-30"
             },
             "has_flying_movement": "0"
         },
@@ -6172,7 +6173,7 @@
             },
             "AbilityCastRange": {
                 "value": "450",
-                "special_bonus_shard": "+250"
+                "special_bonus_shard": "+200"
             },
             "min_duration": "1",
             "max_duration": {
@@ -6183,15 +6184,15 @@
             "soul_return_min_speed": "500",
             "leash_start": {
                 "value": "1600",
-                "special_bonus_shard": "+500"
+                "special_bonus_shard": "+450"
             },
             "base_leash_pull": "50",
             "leash_increase": "1.5",
             "poison_touch_hex": "1.4 1.6 1.8",
             "shallow_grave_heal": "225 300 375",
             "shadow_wave_cdr": "30 40 50",
-            "shard_cast_range_bonus": "250",
-            "shard_leash_range_bonus": "500"
+            "shard_cast_range_bonus": "200",
+            "shard_leash_range_bonus": "450"
         },
         "owner": "npc_dota_hero_dazzle"
     },
@@ -6311,7 +6312,7 @@
         "AbilityValues": {
             "AbilityCastRange": {
                 "value": "800",
-                "special_bonus_unique_dazzle_shadow_wave_cast_range": "+125"
+                "special_bonus_unique_dazzle_shadow_wave_cast_range": "+100"
             },
             "bounce_radius": {
                 "value": "475",
@@ -8851,7 +8852,7 @@
             "eidolon_damage_spread": "3",
             "eidolon_bonus_damage": {
                 "value": "0",
-                "special_bonus_unique_enigma_3": "+30"
+                "special_bonus_unique_enigma_3": "+25"
             },
             "eidolon_bonus_attack_speed": {
                 "value": "0",
@@ -9079,7 +9080,7 @@
             "cooldown_percentage": "30 40 50 60",
             "base_damage": "0",
             "damage_per_stack": {
-                "value": "6 8 10 12",
+                "value": "9 10 11 12",
                 "special_bonus_unique_faceless_void_6": "+6"
             },
             "self_movespeed_tooltip": {
@@ -9524,7 +9525,7 @@
             "max_targets": "16",
             "damage": {
                 "value": "100 140 180",
-                "special_bonus_unique_furion_5": "+25"
+                "special_bonus_unique_furion_5": "+30"
             },
             "damage_percent_add": {
                 "value": "10",
@@ -9579,7 +9580,7 @@
                 "affected_by_aoe_increase": "1"
             },
             "damage": {
-                "value": "100 160 220 280",
+                "value": "110 160 210 260",
                 "special_bonus_unique_grimstroke_2": "+70%"
             },
             "bonus_damage_per_hero": {
@@ -9670,7 +9671,7 @@
                 "value": "275"
             },
             "images_movespeed_bonus": {
-                "value": "30"
+                "value": "25"
             },
             "immunity_resist": "90"
         },
@@ -9787,7 +9788,7 @@
         "AbilityCastAnimation": "ACT_DOTA_GS_SOUL_CHAIN",
         "AbilityCastGestureSlot": "DEFAULT",
         "AbilityCooldown": "70 65 60",
-        "AbilityCastRange": "700 800 900",
+        "AbilityCastRange": "800",
         "AbilityCastPoint": "0.15",
         "AbilityManaCost": "150 200 250",
         "AbilityModifierSupportValue": "0.75",
@@ -9953,7 +9954,7 @@
         "AbilityDuration": "12",
         "AbilityValues": {
             "AbilityCooldown": {
-                "value": "25",
+                "value": "24",
                 "special_bonus_unique_gyrocopter_1": "-6"
             },
             "radius": {
@@ -10468,7 +10469,7 @@
                 "special_bonus_unique_huskar_2": "+5"
             },
             "burn_damage_max_pct": {
-                "value": "0.5",
+                "value": "0.6",
                 "DamageTypeTooltip": "DAMAGE_TYPE_MAGICAL"
             },
             "duration": {
@@ -10621,10 +10622,10 @@
                 "value": "0"
             },
             "AbilityCooldown": {
-                "value": "16 14 12",
+                "value": "15 13 11",
                 "special_bonus_unique_huskar_7": "-5"
             },
-            "immunity_resist": "60"
+            "immunity_resist": "80"
         },
         "owner": "npc_dota_hero_huskar"
     },
@@ -11878,7 +11879,7 @@
         "Innate": "1",
         "IsBreakable": "1",
         "AbilityValues": {
-            "max_stacks": "10",
+            "max_stacks": "12",
             "stack_gain_time": {
                 "value": "2.0",
                 "special_bonus_unique_juggernaut_3": "-1.0"
@@ -11915,7 +11916,7 @@
         "AbilityCastRange": "350",
         "AbilityCastPoint": "0.3 0.3 0.3 0.3",
         "AbilityDuration": "18 20 22 24",
-        "AbilityManaCost": "120",
+        "AbilityManaCost": "110",
         "AbilityValues": {
             "healing_ward_heal_amount": {
                 "value": "2 3 4 5",
@@ -12773,7 +12774,7 @@
                 "affected_by_aoe_increase": "1"
             },
             "damage": {
-                "value": "60 120 180 240",
+                "value": "80 140 200 260",
                 "DamageTypeTooltip": "DAMAGE_TYPE_PHYSICAL"
             },
             "speed": "2000",
@@ -13114,7 +13115,7 @@
             "rhythm_interval": "1",
             "rhythm_grace_period": "0.4",
             "max_stacks": {
-                "value": "5"
+                "value": "4 5 6"
             },
             "armor_per_stack": "2 3 4",
             "song_cost_reduction_per_stack_tooltip": "1 1.5 2",
@@ -14533,9 +14534,9 @@
         "AbilityCastPoint": "0.0",
         "AbilityManaCost": "50",
         "AbilityValues": {
-            "flame_cloak_duration": "7",
+            "flame_cloak_duration": "8",
             "magic_resistance": {
-                "value": "35",
+                "value": "40",
                 "display_type": "kBuffPercentage"
             },
             "spell_amp": {
@@ -15037,6 +15038,7 @@
             },
             "damage_gain_per_druid_level": "0",
             "hp_gain_per_druid_level": "0",
+            "scepter_gained_cooldown": "6",
             "bear_attack_leash_range": {
                 "value": "1100"
             },
@@ -15632,6 +15634,7 @@
         "IsBreakable": "1",
         "AbilityValues": {
             "mark_duration": "6",
+            "mark_range": "1200",
             "bonus_damage": {
                 "value": "5",
                 "special_bonus_unique_lycan_4": "+2",
@@ -16876,7 +16879,7 @@
                 "affected_by_aoe_increase": "1"
             },
             "duration": {
-                "value": "5 5.5 6",
+                "value": "4.5 5 5.5",
                 "special_bonus_unique_medusa": "+3"
             },
             "slow": "35",
@@ -16929,7 +16932,7 @@
             "dps_penalty_pct": "50 66 75 80",
             "attribute_penalty_pct": "0",
             "xp_penalty_pct": "50 66 75 80",
-            "xp_penalty_time": "5.0",
+            "xp_penalty_time": "10.0",
             "AbilityCastRange": {
                 "special_bonus_shard": "250"
             },
@@ -18330,12 +18333,12 @@
         "IsBreakable": "1",
         "AbilityValues": {
             "evasion_per_naga": {
-                "value": "4.0",
+                "value": "5.0",
                 "hero_levelup": "0.1",
                 "special_bonus_unique_naga_siren_eelskin_evasion": "+3"
             },
             "radius": {
-                "value": "900",
+                "value": "1200",
                 "affected_by_aoe_increase": "1"
             }
         },
@@ -18701,7 +18704,7 @@
         "TooltipSummaryProperties": "stun_duration;damage_per_health;#DOTA_Tooltip_ability_necrolyte_reapers_scythe___kill_bonus",
         "AbilityCastPoint": "0.45",
         "AbilityCastAnimation": "ACT_DOTA_CAST_ABILITY_4",
-        "AbilityCooldown": "100",
+        "AbilityCooldown": "95",
         "AbilityManaCost": "250 375 500",
         "AbilityModifierSupportValue": "0.1",
         "AbilityValues": {
@@ -20890,7 +20893,7 @@
         "AbilityManaCost": "35 40 45 50",
         "AbilityValues": {
             "bonus_attack_speed": {
-                "value": "80 120 160 200",
+                "value": "75 100 125 150",
                 "special_bonus_unique_phantom_assassin_strike_aspd": "+60"
             },
             "duration": {
@@ -20926,11 +20929,11 @@
             "duration": "2.1 2.4 2.7 3",
             "base_damage": "65 70 75 80",
             "attack_factor": {
-                "value": "-70 -55 -40 -25",
+                "value": "-75 -60 -45 -30",
                 "special_bonus_unique_phantom_assassin_5": "+20"
             },
             "attack_factor_tooltip": {
-                "value": "30 45 60 75",
+                "value": "25 40 55 70",
                 "special_bonus_unique_phantom_assassin_5": "+15",
                 "DamageTypeTooltip": "DAMAGE_TYPE_PHYSICAL"
             },
@@ -20994,7 +20997,7 @@
         "MaxLevel": "1",
         "AbilityValues": {
             "outgoing_floor": {
-                "value": "17",
+                "value": "15",
                 "hero_levelup": "2",
                 "levelup_interval": "3"
             },
@@ -21410,7 +21413,7 @@
             "hp_per_threshold": "100",
             "base_slow_resist": "10",
             "base_aoe": "0",
-            "slow_resistance_per_threshold": "1",
+            "slow_resistance_per_threshold": "0.75",
             "aoe_per_threshold": "0.5",
             "current_slow_resistance": {
                 "dynamic_value": "true"
@@ -22889,8 +22892,8 @@
             "invis_movespeed_bonus_percent": {
                 "special_bonus_unique_riki_8": "10"
             },
-            "bonus_xp_kill": "130 260 390",
-            "bonus_xp_assist": "100"
+            "bonus_xp_kill": "100 200 300",
+            "bonus_xp_assist": "50"
         },
         "AbilityCastAnimation": "ACT_DOTA_CAST_ABILITY_3",
         "owner": "npc_dota_hero_riki"
@@ -23028,7 +23031,7 @@
                 "special_bonus_shard": "5"
             },
             "AbilityCooldown": {
-                "value": "15 14 13 12",
+                "value": "16 15 14 13",
                 "special_bonus_unique_riki_3": "-3"
             }
         },
@@ -23848,7 +23851,7 @@
                 "special_bonus_scepter": "=0.8"
             },
             "spine_damage_pct": {
-                "special_bonus_scepter": "75"
+                "special_bonus_scepter": "70"
             }
         },
         "AbilityCastAnimation": "ACT_DOTA_CAST_ABILITY_1",
@@ -24112,7 +24115,7 @@
             "illusion_outgoing_damage": "-80.0 -70.0 -60.0 -50.0",
             "illusion_outgoing_tooltip": "20.0 30.0 40.0 50.0",
             "illusion_flat_damage": {
-                "value": "20 35 50 65",
+                "value": "15 30 45 60",
                 "CalculateSpellDamageTooltip": "0",
                 "DamageTypeTooltip": "DAMAGE_TYPE_PHYSICAL"
             },
@@ -24439,7 +24442,7 @@
         "HasScepterUpgrade": "1",
         "AbilityCastPoint": "0.3 0.3 0.3 0.3",
         "AbilityChannelTime": "2.4 3.0 3.6 4.2",
-        "AbilityCooldown": "14 13 12 11",
+        "AbilityCooldown": "15 14 13 12",
         "AbilityManaCost": "125 140 155 170",
         "AbilityValues": {
             "AbilityCastRange": {
@@ -25092,7 +25095,7 @@
         "SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES",
         "IsBreakable": "1",
         "AbilityCastPoint": "0.1",
-        "AbilityManaCost": "70 80 90 100",
+        "AbilityManaCost": "70 85 100 115",
         "AbilityValues": {
             "skeleton_duration": {
                 "value": "40"
@@ -25930,7 +25933,7 @@
         "AbilityManaCost": "105",
         "AbilityValues": {
             "AbilityCooldown": {
-                "value": "18 17 16 15"
+                "value": "17 16 15 14"
             },
             "AbilityCharges": {
                 "value": "0",
@@ -26003,7 +26006,7 @@
         "AbilityCastAnimation": "ACT_DOTA_OVERRIDE_ABILITY_3",
         "AbilityCooldown": "21 18 15 12",
         "AbilityDuration": "6",
-        "AbilityManaCost": "70 80 90 100",
+        "AbilityManaCost": "60 65 70 75",
         "AbilityValues": {
             "damage": "20 35 50 65",
             "buffed_attacks": {
@@ -28396,7 +28399,7 @@
                 "DamageTypeTooltip": "DAMAGE_TYPE_NONE"
             },
             "bonus_slow_resistance": {
-                "value": "40",
+                "value": "30",
                 "special_bonus_unique_sven_gods_strength_slow_resist": "+20"
             },
             "AbilityCooldown": {
@@ -28556,8 +28559,8 @@
         "IsBreakable": "1",
         "AbilityValues": {
             "bonus_damage_per_str": {
-                "value": "0.08",
-                "hero_levelup": "0.02"
+                "value": "0.15",
+                "hero_levelup": "0.01"
             },
             "current_bonus_damage_tooltip": {
                 "dynamic_value": "true"
@@ -30719,7 +30722,7 @@
                 "special_bonus_unique_troll_warlord_battle_trance_movespeed": "+100"
             },
             "movement_speed": {
-                "value": "35"
+                "value": "30"
             },
             "status_resistance": {
                 "value": "15 20 25"
@@ -30751,7 +30754,7 @@
         "MaxLevel": "4",
         "AbilityValues": {
             "bonus_move_speed": {
-                "value": "15 25 35 45",
+                "value": "15 20 25 30",
                 "special_bonus_unique_troll_warlord_2": "+20"
             },
             "bonus_armor": {
@@ -32530,8 +32533,8 @@
         "AbilityManaCost": "50",
         "AbilityValues": {
             "AbilityCooldown": {
-                "value": "45.75",
-                "hero_levelup": "-0.75"
+                "value": "45.5",
+                "hero_levelup": "-0.5"
             },
             "flight_duration": {
                 "value": "20",
