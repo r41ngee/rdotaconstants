@@ -77,7 +77,7 @@ dependencies = [
 
 [[package]]
 name = "rdotaconstants"
-version = "0.5.15"
+version = "0.5.16"
 dependencies = [
  "bincode-next",
  "outdir",
